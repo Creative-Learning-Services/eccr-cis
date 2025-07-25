@@ -1,0 +1,4 @@
+.vscode
+neo4j
+__pycache__
+*.sqlite3
