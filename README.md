@@ -16,10 +16,13 @@ graph TD;
         subgraph External
                 LDSS;
                 XIA;
-                ECC
+                ECC;
+                ELRR;
+                EDLM[EDLM Portal];
         end
         subgraph ECCR
                 CIS;
+                CES;
                 CDS;
                 CMS;
                 CDSUI[CDS UI];
@@ -27,11 +30,12 @@ graph TD;
         end
         LDSS-->|Profile|CIS;
         XIA-.->|Indexing|CIS;
-        CIS-.->|References|ECC;
+        CIS-.->|References|ECC & ELRR & EDLM;
         CIS-->|Competency & Credential|CMS;
-        CIS-.->|Competency & Credential|CDS;
+        CIS-.->|Competency & Credential|CDS & CES;
         CMS-->CMSUI;
         CDS-.->CDSUI;
+        CES-.->CDS;
 ```
 
 ## ECCR Data Diagram
