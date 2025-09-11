@@ -1,10 +1,20 @@
 services:
   neo4j:
     image: neo4j:latest
-    ports:
-      - 7474:7474
-      - 7687:7687
+    container_name: neo4j-demo
     volumes:
-      - ./neo4j:/data:rw
+      - ./logs:/logs
+      - ./config:/config
+      - ./data:/data
+      - ./plugins:/plugins
+      - ./init.cypher:/var/lib/neo4j/init.cypher
+      - ./init-neo4j.sh:/usr/local/bin/init-neo4j.sh # Mount the startup script
     environment:
       - NEO4J_AUTH=none
+      - NEO4JLABS_PLUGINS=["apoc"] # Add this line to install APOC
+    # Overwrite the command to run our custom startup script
+    command: ["/bin/bash", "/usr/local/bin/init-neo4j.sh"]
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    restart: always

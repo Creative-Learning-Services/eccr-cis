@@ -42,27 +42,10 @@ graph TD;
 
 ## ECCR Data Diagram
 
-```mermaid
----
-config:
-        layout: elk
-title: ECCR Data Model
----
-erDiagram
-    f[Framework]{
-        uid uuid PK
-        string name
-        string description
-        string rubric
-    }
-    c[Competency]{
-        uid uuid PK
-        string name
-        string description
-    }
-    f 1--0+ f : SameAs
-    f 1--0+ c : Contains
-    c 1--0+ c : SameAs
-    c 1--0+ c : Prerequisite
-```
+### DOT&E Domain Diagram
 
+![ECCR DOT&E Domain Diagram](./assets/DOT&E_Graph.png)
+
+### DCWF Domain Diagram
+
+![DCWF Domain Diagram](./assets/DCWF_GRAPH_MODEL.png)
