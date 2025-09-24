@@ -1,0 +1,40 @@
+from rest_framework import serializers
+
+
+class CompetencySerializer(serializers.Serializer):
+    id = serializers.CharField()
+    name = serializers.CharField()
+    description = serializers.CharField(required=False, allow_blank=True)
+    competency_statement = serializers.CharField(required=False, allow_blank=True)
+    competency_framework = serializers.CharField(required=False, allow_blank=True)
+    resource_association = serializers.CharField(required=False, allow_blank=True)
+    reference_code = serializers.CharField(required=False, allow_blank=True)
+    competency_level = serializers.CharField(required=False, allow_blank=True)
+    type_label = serializers.CharField(required=False, allow_blank=True)
+    type_uri = serializers.CharField(required=False, allow_blank=True)
+    ksat_type = serializers.CharField(required=False, allow_blank=True)
+    PROFILE = serializers.ListField(child=serializers.CharField(), required=False)
+    domain = serializers.CharField(required=False, allow_blank=True)
+    conformsTo = serializers.CharField(required=False, allow_blank=True)
+
+
+class WorkRoleSerializer(serializers.Serializer):
+    id = serializers.CharField()
+    name = serializers.CharField()
+    description = serializers.CharField(required=False, allow_blank=True)
+    NISTID = serializers.CharField(required=False, allow_blank=True)
+    authoritativeSource = serializers.CharField(required=False, allow_blank=True)
+    resourceAssociation = serializers.CharField(required=False, allow_blank=True)
+    competencyDefinition = serializers.CharField(required=False, allow_blank=True)
+    classification = serializers.CharField(required=False, allow_blank=True)
+    markings = serializers.ListField(child=serializers.CharField(), required=False)
+    LocationName = serializers.CharField(required=False, allow_blank=True)
+    JobSalary = serializers.CharField(required=False, allow_blank=True)
+    JobTravelCode = serializers.CharField(required=False, allow_blank=True)
+    PromotionPotential = serializers.CharField(required=False, allow_blank=True)
+    careerpathway = serializers.ListField(child=serializers.CharField(), required=False)
+    type_uri = serializers.CharField(required=False, allow_blank=True)
+    PROFILE = serializers.ListField(child=serializers.CharField(), required=False)
+    domain = serializers.CharField(required=False, allow_blank=True)
+    conformsTo = serializers.CharField(required=False, allow_blank=True)
+    type_label = serializers.CharField(required=False, allow_blank=True)

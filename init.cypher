@@ -1,624 +1,282 @@
-// Create WorkRole nodes
+// Create DCWF Framework Hierarchy
 CREATE
-  (wr1:WorkRole:Framework
+  (DCWFF1:DCWFFramework:Framework
+    {
+      id: "DCWFF-001",
+      name: "DoD Cyber Workforce Framework",
+      description:
+        "Department of Defense's standardized system for describing and managing its cyber-related personnel, serving as a common lexicon of work roles, tasks, and necessary knowledge, skills, and abilities",
+      authoritativeSource: "https://public.cyber.mil/dcwf-framework",
+      competencyDefinition: ["CD-EXPL-001", "CD-INTEL-002", "CD-VULN-003"],
+      PROFILE: ["Framework", "DCWFFramework"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
+    })
+
+CREATE
+  (FC1:FunctionalCommunity:Framework
+    {
+      id: "DCWF-FC1",
+      name: "Cyberspace Information Technology (IT) Workforce",
+      description:
+        "Personnel who design, build, configure, operate, and maintain IT, networks, and capabilities.",
+      authoritativeSource:
+        "https://public.cyber.mil/dcwf-functional-community/cyberspace_it_workforce",
+      competencyDefinition: ["CD-TECH-001", "CD-CUST-002", "CD-SOFT-004"],
+      PROFILE: ["Framework", "FunctionalCommunity"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
+    })
+
+CREATE
+  (wr1:WorkForceElement:Framework
+    {
+      id: "DCWF-FC1-CE",
+      name: "Cyberspace Enablers",
+      description:
+        "A broad element focusing on personnel who enable cyberspace operations.",
+      authoritativeSource:
+        "https://public.cyber.mil/dcwf-workforce-element/cyber_enabler",
+      competencyDefinition: ["CD-SEC-005", "CD-DEV-001", "CD-RSCH-002"],
+      PROFILE: ["Framework", "WorkForceElement"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
+    })
+
+// Create Job Competency Nodes
+CREATE
+  (job1:Job:Competency
     {
       id: "WR-AN-EX-001",
       name: "Exploitation Analyst",
       description:
         "Partners with cyberspace operations customers to identify access and collection gaps that can be satisfied through cyberspace exploitation.",
-      NISTID: "AN-EX-001",
-      authoritativeSource:
-        "https://public.cyber.mil/dcwf-work-role/exploitation-analyst/",
-      resourceAssociation: ["RA-CYBER-001", "RA-INTEL-003"],
-      competencyDefinition: ["CD-EXPL-001", "CD-INTEL-002", "CD-VULN-003"],
-      classification: "Cyber Effects",
-      markings: ["UNCLASSIFIED", "CUI"],
+      competencyStatement: "Job of Exploitation Analyst within DCWF",
+      isSupportedBy: ["RA-CYBER-001", "RA-INTEL-003"],
+      type: "Job",
+      typeURI: "https://ksat.nist.gov/Job",
+      markings: ["UNCLASSIFIED"],
       LocationName: "Washington, DC",
       JobSalary: "GS-12/13",
       JobTravelCode: "25% Travel",
       PromotionPotential: "GS-14",
       careerpathway: ["CP-INTEL-001", "CP-CYBER-003"],
-      PROFILE: ["Framework", "WorkRole"],
+      AssessmentRubric: "https://rubrics.cyber/exploitation_analyst",
+      NISTID: ["NIST-SP-800-181"],
+      DCWFID: ["DCWF-101"],
+      PROFILE: ["job", "competency"],
       domain: "DCWF",
-      type_uri: "https://public.cyber.mil/dcwf-work-role/exploitation-analyst/"
+      conformsTo: "SCD 1.0"
     })
 
 CREATE
-  (wr2:WorkRole:Framework
+  (job2:Job:Competency
     {
       id: "WR-OM-TS-001",
       name: "Technical Support Specialist",
       description:
         "Provides technical support to customers who need assistance utilizing client level hardware and software in accordance with established organizational processes.",
-      NISTID: "OM-TS-001",
-      authoritativeSource:
-        "https://public.cyber.mil/dcwf-work-role/technical-support-specialist/",
-      resourceAssociation: ["RA-TECH-002", "RA-SUPP-001"],
-      competencyDefinition: ["CD-TECH-001", "CD-CUST-002", "CD-SOFT-004"],
-      classification: "Cyber IT",
+      competencyStatement: "Job of Technical Support Specialist within DCWF",
+      isSupportedBy: ["RA-TECH-002", "RA-SUPP-001"],
+      type: "Job",
+      typeURI: "https://ksat.nist.gov/Job",
       markings: ["UNCLASSIFIED"],
       LocationName: "San Antonio, TX",
       JobSalary: "GS-9/11",
       JobTravelCode: "10% Travel",
       PromotionPotential: "GS-12",
       careerpathway: ["CP-IT-001", "CP-SECOPS-002"],
-      PROFILE: ["Framework", "WorkRole"],
-      domain: "DCWF",
-      type_uri:
-        "https://public.cyber.mil/dcwf-work-role/technical-support-specialist/"
-    })
-
-CREATE
-  (wr3:WorkRole:Framework
-    {
-      id: "WR-SP-RD-001",
-      name: "Research & Development Specialist",
-      description:
-        "Conducts software and systems engineering and software systems research to develop new capabilities, ensuring cybersecurity is fully integrated.",
-      NISTID: "SP-RD-001",
-      authoritativeSource:
-        "https://public.cyber.mil/dcwf-work-role/research-development-specialist/",
-      resourceAssociation: ["RA-RND-001", "RA-DEV-003"],
-      competencyDefinition: ["CD-SEC-005", "CD-DEV-001", "CD-RSCH-002"],
-      classification: "Cyber IT",
-      markings: ["UNCLASSIFIED", "CUI"],
-      LocationName: "Alexandria, VA",
-      JobSalary: "GS-12/13",
-      JobTravelCode: "15% Travel",
-      PromotionPotential: "GS-14",
-      careerpathway: ["CP-ARCH-001", "CP-DEV-003"],
-      PROFILE: ["Framework", "WorkRole"],
-      domain: "DCWF",
-      type_uri:
-        "https://public.cyber.mil/dcwf-work-role/research-development-specialist/"
-    })
-
-CREATE
-  (wr4:WorkRole:Framework
-    {
-      id: "WR-AN-TWA-001",
-      name: "Threat Warning Analyst",
-      description:
-        "Develops cyber indicators to maintain awareness of the status of highly dynamic operating environments.",
-      NISTID: "AN-TWA-001",
-      authoritativeSource:
-        "https://public.cyber.mil/dcwf-work-role/threat-warning-analyst/",
-      resourceAssociation: ["RA-INTEL-002", "RA-THREAT-001"],
-      competencyDefinition: ["CD-THRT-001", "CD-INTEL-003", "CD-INDIC-002"],
-      classification: "Cyber Intelligence",
-      markings: ["UNCLASSIFIED", "SECRET"],
-      LocationName: "Fort Meade, MD",
-      JobSalary: "GS-11/12",
-      JobTravelCode: "5% Travel",
-      PromotionPotential: "GS-13",
-      careerpathway: ["CP-INTEL-002", "CP-THREAT-001"],
-      PROFILE: ["Framework", "WorkRole"],
-      domain: "DCWF",
-      type_uri:
-        "https://public.cyber.mil/dcwf-work-role/threat-warning-analyst/"
-    })
-
-CREATE
-  (wr5:WorkRole:Framework
-    {
-      id: "WR-CO-CLO-002",
-      name: "Cyber Operator",
-      description:
-        "Conducts collection, processing, and/or geolocation of systems to exploit, locate, and/or track targets of interest.",
-      NISTID: "CO-CLO-002",
-      authoritativeSource:
-        "https://public.cyber.mil/dcwf-work-role/cyber-operator/",
-      resourceAssociation: ["RA-OPS-001", "RA-COLLECT-003"],
-      competencyDefinition: ["CD-OPS-001", "CD-EXPL-002", "CD-COLLECT-003"],
-      classification: "Cyber Effects",
-      markings: ["SECRET", "TOP SECRET"],
-      LocationName: "Tampa, FL",
-      JobSalary: "GS-12/13",
-      JobTravelCode: "30% Travel",
-      PromotionPotential: "GS-14",
-      careerpathway: ["CP-OPS-002", "CP-LEAD-001"],
-      PROFILE: ["Framework", "WorkRole"],
-      domain: "DCWF",
-      type_uri: "https://public.cyber.mil/dcwf-work-role/cyber-operator/"
-    });
-
-// Create 5 KSAT nodes
-
-CREATE
-  (ksat1:KSATS:Competency
-    {
-      id: "KSAT-101",
-      name: "Network Traffic Analysis",
-      description:
-        "Ability to analyze and interpret network traffic for security monitoring.",
-      type: "Skill",
-      classification: "Technical",
-      markings: ["UNCLASSIFIED"],
-      AssessmentRubric: "https://rubrics.cyber/ksat-101",
-      KSATOwner: "NIST",
-      KSATURL: "https://ksat.nist.gov/ksat-101",
-      RelatedCredentials: ["https://cred.cyber/cert-001"],
-      RelatedWorkRoles: ["https://roles.cyber/wr-001"],
-      NISTID: ["NIST-SP-800-181"],
-      DCWFID: ["DCWF-101"],
-      KSATType: ["Skill"],
-      KSATS: ["KSAT-101"],
-      PROFILE: ["ksats", "competency"]
-    })
-
-CREATE
-  (ksat2:KSATS:Competency
-    {
-      id: "KSAT-102",
-      name: "Malware Reverse Engineering",
-      description:
-        "Skill in deconstructing malware to determine its functionality and impact.",
-      type: "Skill",
-      classification: "Technical",
-      markings: ["SECRET"],
-      AssessmentRubric: "https://rubrics.cyber/ksat-102",
-      KSATOwner: "NIST",
-      KSATURL: "https://ksat.nist.gov/ksat-102",
-      RelatedCredentials: ["https://cred.cyber/cert-002"],
-      RelatedWorkRoles: ["https://roles.cyber/wr-002"],
+      AssessmentRubric: "https://rubrics.cyber/technical_support_specialist",
       NISTID: ["NIST-SP-800-181"],
       DCWFID: ["DCWF-102"],
-      KSATType: ["Skill"],
-      KSATS: ["KSAT-102"],
-      PROFILE: ["ksats", "competency"]
+      PROFILE: ["job", "competency"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
+    })
+
+// Create Work Role Competency Hierarchy
+CREATE
+  (awr1:AdvancedWorkRole:Competency
+    {
+      id: "AdvancedWorkRole-102",
+      name: "Advanced Technical Support Specialist",
+      description:
+        "Diagnoses, resolves, and identifies enhancements resulting from complex or novel incidents.",
+      competencyStatement:
+        "Can diagnosis, resolve, and indentify enhancements resulting from complex or novel incidents",
+      isSupportedBy: ["RA-CYBER-001", "RA-INTEL-003"],
+      type: "Advanced Work Role",
+      typeURI: "https://ksat.nist.gov/AdvancedWorkRole",
+      AssessmentRubric: "https://rubrics.cyber/technicalsupportspecialist",
+      NISTID: ["NIST-SP-800-181"],
+      DCWFID: ["411"],
+      PROFILE: ["work role", "competency"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
     })
 
 CREATE
-  (ksat3:KSATS:Competency
+  (iwr1:IntermediateWorkRole:Competency
+    {
+      id: "IntermediateWorkRole-102",
+      name: "Intermediate Technical Support Specialist",
+      description:
+        "Diagnoses and resolves customer-reported system incidents, problems, and events independently.",
+      competencyStatement:
+        "Can supervise diagnosis of system incidents, problems, and events",
+      isSupportedBy: ["RA-CYBER-001", "RA-INTEL-003"],
+      type: "Intermediate Work Role",
+      typeURI: "https://ksat.nist.gov/IntermediateWorkRole",
+      AssessmentRubric: "https://rubrics.cyber/technicalsupportspecialist",
+      NISTID: ["NIST-SP-800-181"],
+      DCWFID: ["411"],
+      PROFILE: ["workRole", "competency"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
+    })
+
+CREATE
+  (bwr1:BasicWorkRole:Competency
+    {
+      id: "BasicWorkRole-102",
+      name: "Basic Technical Support Specialist",
+      description:
+        "Supports the diagnosis of customer-reported system incidents, problems, and events under supervision.",
+      competencyStatement:
+        "Can supervise diagnosis of system incidents, problems, and events while supervised",
+      isSupportedBy: ["RA-CYBER-001", "RA-INTEL-003"],
+      type: "Basic Work Role",
+      typeURI: "https://ksat.nist.gov/BasicWorkRole",
+      AssessmentRubric: "https://rubrics.cyber/technicalsupportspecialist",
+      NISTID: ["NIST-SP-800-181"],
+      DCWFID: ["411"],
+      PROFILE: ["work role", "competency"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
+    })
+
+// Create framework hierarchy relationships
+CREATE (DCWFF1)-[:HAS_SUBFRAMEWORK]->(FC1)
+CREATE (FC1)-[:HAS_SUBFRAMEWORK]->(wr1)
+
+// Create work role hierarchy requires relationships
+CREATE (awr1)-[:REQUIRES]->(iwr1)
+CREATE (iwr1)-[:REQUIRES]->(bwr1);
+
+// Create KSAT Competency nodes with proper typing
+
+CREATE
+  (ksat3:KSATSTask:Competency
     {
       id: "KSAT-103",
       name: "Incident Response Coordination",
       description:
-        "Ability to coordinate and manage cyber incident response activities.",
-      type: "Ability",
-      classification: "Management",
-      markings: ["UNCLASSIFIED", "CUI"],
+        "Task of coordinating and managing cyber incident response activities.",
+      competencyStatement:
+        "Can coordinate and manage cyber incident response activities",
+      type: "Task",
+      typeURI: "https://ksat.nist.gov/KSAT/Task",
       AssessmentRubric: "https://rubrics.cyber/ksat-103",
-      KSATOwner: "NIST",
-      KSATURL: "https://ksat.nist.gov/ksat-103",
-      RelatedCredentials: ["https://cred.cyber/cert-003"],
-      RelatedWorkRoles: ["https://roles.cyber/wr-003"],
+      Owner: "NIST",
       NISTID: ["NIST-SP-800-181"],
       DCWFID: ["DCWF-103"],
-      KSATType: ["Ability"],
-      KSATS: ["KSAT-103"],
-      PROFILE: ["ksats", "competency"]
+      PROFILE: ["ksats", "competency", "task"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
     })
 
 CREATE
-  (ksat4:KSATS:Competency
-    {
-      id: "KSAT-104",
-      name: "Vulnerability Assessment",
-      description:
-        "Skill in conducting vulnerability assessments of systems and networks.",
-      type: "Skill",
-      classification: "Technical",
-      markings: ["UNCLASSIFIED"],
-      AssessmentRubric: "https://rubrics.cyber/ksat-104",
-      KSATOwner: "NIST",
-      KSATURL: "https://ksat.nist.gov/ksat-104",
-      RelatedCredentials: ["https://cred.cyber/cert-004"],
-      RelatedWorkRoles: ["https://roles.cyber/wr-004"],
-      NISTID: ["NIST-SP-800-181"],
-      DCWFID: ["DCWF-104"],
-      KSATType: ["Skill"],
-      KSATS: ["KSAT-104"],
-      PROFILE: ["ksats", "competency"]
-    })
-
-CREATE
-  (ksat5:KSATS:Competency
+  (ksat5:KSATSAbility:Competency
     {
       id: "KSAT-105",
       name: "Security Policy Development",
       description:
         "Ability to develop and implement cybersecurity policies and standards.",
+      competencyStatement:
+        "Can develop and implement cybersecurity policies and standards",
       type: "Ability",
-      classification: "Policy",
-      markings: ["UNCLASSIFIED"],
+      typeURI: "https://ksat.nist.gov/KSAT/Ability",
       AssessmentRubric: "https://rubrics.cyber/ksat-105",
-      KSATOwner: "NIST",
-      KSATURL: "https://ksat.nist.gov/ksat-105",
-      RelatedCredentials: ["https://cred.cyber/cert-005"],
-      RelatedWorkRoles: ["https://roles.cyber/wr-005"],
+      Owner: "NIST",
       NISTID: ["NIST-SP-800-181"],
       DCWFID: ["DCWF-105"],
-      KSATType: ["Ability"],
-      KSATS: ["KSAT-105"],
-      PROFILE: ["ksats", "competency"]
-    });
-
-// Create relationships between WorkRole:Framework and KSATS:Competency nodes
-
-MATCH
-  (wr1:WorkRole:Framework {id: "WR-AN-EX-001"}),
-  (ksat1:KSATS:Competency {id: "KSAT-101"})
-CREATE
-  (wr1)-
-    [:INCLUDES_KSATS {
-        rationale: "KSAT-101 is a core skill for Exploitation Analysts",
-        relevance: 0.95
-      }]->
-  (ksat1);
-
-MATCH
-  (wr2:WorkRole:Framework {id: "WR-OM-TS-001"}),
-  (ksat2:KSATS:Competency {id: "KSAT-102"})
-CREATE
-  (wr2)-
-    [:INCLUDES_KSATS {
-        rationale: "KSAT-102 is required for advanced technical support roles",
-        relevance: 0.85
-      }]->
-  (ksat2);
-
-MATCH
-  (wr3:WorkRole:Framework {id: "WR-SP-RD-001"}),
-  (ksat3:KSATS:Competency {id: "KSAT-103"})
-CREATE
-  (wr3)-
-    [:INCLUDES_KSATS {
-        rationale:
-          "KSAT-103 is essential for R&D specialists managing incident response",
-        relevance: 0.9
-      }]->
-  (ksat3);
-
-MATCH
-  (wr4:WorkRole:Framework {id: "WR-AN-TWA-001"}),
-  (ksat4:KSATS:Competency {id: "KSAT-104"})
-CREATE
-  (wr4)-
-    [:INCLUDES_KSATS {
-        rationale: "KSAT-104 supports threat warning analysis duties",
-        relevance: 0.88
-      }]->
-  (ksat4);
-
-MATCH
-  (wr5:WorkRole:Framework {id: "WR-CO-CLO-002"}),
-  (ksat5:KSATS:Competency {id: "KSAT-105"})
-CREATE
-  (wr5)-
-    [:INCLUDES_KSATS {
-        rationale: "KSAT-105 is relevant for cyber operators developing policy",
-        relevance: 0.8
-      }]->
-  (ksat5);
-
-// Create Functional Community nodes
-CREATE
-  (fc1:FunctionalCommunity:Competency
-    {
-      id: "FC-COMP-001",
-      name: "Cyber Threat Hunting",
-      description:
-        "Ability to proactively search for cyber threats that evade existing security solutions.",
-      competencyStatement:
-        "Can conduct proactive threat hunting using advanced techniques.",
-      resourceAssociation: ["https://resources.cyber/fc1"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "FCTH-001",
-      competencyLevel: "Advanced",
-      typeLabel: "Technical",
-      typeUri: "https://types.cyber/technical",
-      PROFILE: ["FunctionalCommunity", "Competency"],
-      domain: "DCWF"
+      PROFILE: ["ksats", "competency"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
     })
 
 CREATE
-  (fc2:FunctionalCommunity:Competency
+  (ksat4:KSATSSkill:Competency
     {
-      id: "FC-COMP-002",
-      name: "Security Architecture Design",
+      id: "KSAT-104",
+      name: "Vulnerability Assessment",
       description:
-        "Ability to design comprehensive security architectures that align with business objectives.",
+        "Skill in conducting vulnerability assessments of systems and networks.",
       competencyStatement:
-        "Can design secure architectures that meet organizational requirements.",
-      resourceAssociation: ["https://resources.cyber/fc2"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "FCAD-002",
-      competencyLevel: "Expert",
-      typeLabel: "Technical",
-      typeUri: "https://types.cyber/technical",
-      PROFILE: ["FunctionalCommunity", "Competency"],
-      domain: "DCWF"
+        "Can conduct vulnerability assessments of systems and networks",
+      type: "Skill",
+      typeURI: "https://ksat.nist.gov/KSAT/Skill",
+      AssessmentRubric: "https://rubrics.cyber/ksat-104",
+      Owner: "NIST",
+      NISTID: ["NIST-SP-800-181"],
+      DCWFID: ["DCWF-104"],
+      PROFILE: ["ksats", "competency", "skill"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
     })
 
 CREATE
-  (fc3:FunctionalCommunity:Competency
+  (ksat6:KSATSKnowledge:Competency
     {
-      id: "FC-COMP-003",
-      name: "Offensive Security Operations",
+      id: "KSAT-106",
+      name: "Vulnerability Assessment Knowledge",
       description:
-        "Knowledge of offensive security techniques and methodologies used in penetration testing.",
+        "Knowledge in conducting vulnerability assessments of systems and networks.",
       competencyStatement:
-        "Can perform controlled offensive security operations.",
-      resourceAssociation: ["https://resources.cyber/fc3"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "FCOS-003",
-      competencyLevel: "Advanced",
-      typeLabel: "Technical",
-      typeUri: "https://types.cyber/technical",
-      PROFILE: ["FunctionalCommunity", "Competency"],
-      domain: "DCWF"
+        "Understands conducting vulnerability assessments of systems and networks",
+      type: "Knowledge",
+      typeURI: "https://ksat.nist.gov/KSAT/Knowledge",
+      AssessmentRubric: "https://rubrics.cyber/ksat-106",
+      Owner: "NIST",
+      NISTID: ["NIST-SP-800-181"],
+      DCWFID: ["DCWF-106"],
+      PROFILE: ["ksats", "competency", "knowledge"],
+      domain: "DCWF",
+      conformsTo: "SCD 1.0"
     })
 
-CREATE
-  (fc4:FunctionalCommunity:Competency
-    {
-      id: "FC-COMP-004",
-      name: "Cyber Policy Development",
-      description:
-        "Ability to develop comprehensive cybersecurity policies and standards.",
-      competencyStatement:
-        "Can create effective cybersecurity policies aligned with regulations.",
-      resourceAssociation: ["https://resources.cyber/fc4"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "FCPD-004",
-      competencyLevel: "Intermediate",
-      typeLabel: "Management",
-      typeUri: "https://types.cyber/management",
-      PROFILE: ["FunctionalCommunity", "Competency"],
-      domain: "DCWF"
-    })
+// Create KSAT type relationships (Task > Ability > Knowledge + Skill)
+CREATE (ksat3)-[:REQUIRES]->(ksat5)
+CREATE (ksat5)-[:REQUIRES]->(ksat4)
+CREATE (ksat5)-[:REQUIRES]->(ksat6);
 
-CREATE
-  (fc5:FunctionalCommunity:Competency
-    {
-      id: "FC-COMP-005",
-      name: "Cyber Threat Intelligence Analysis",
-      description:
-        "Ability to analyze and synthesize intelligence from multiple sources to identify threats.",
-      competencyStatement:
-        "Can analyze and correlate threat data from multiple sources.",
-      resourceAssociation: ["https://resources.cyber/fc5"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "FCTI-005",
-      competencyLevel: "Advanced",
-      typeLabel: "Technical",
-      typeUri: "https://types.cyber/technical",
-      PROFILE: ["FunctionalCommunity", "Competency"],
-      domain: "DCWF"
-    });
-
-// FunctionalCommunity:Competency nodes
+// Create relationships between Job:Competency nodes and KSAT:Competency nodes
 
 MATCH
-  (wr1:WorkRole:Framework {id: "WR-AN-EX-001"}),
-  (fc1:FunctionalCommunity:Competency {id: "FC-COMP-001"})
-CREATE
-  (wr1)-
-    [:REQUIRES {
-        rationale: "Threat hunting is essential for exploitation analysts.",
-        criticality: "High"
-      }]->
-  (fc1);
+  (job1:Job:Competency {id: "WR-AN-EX-001"}),
+  (ksat3:KSATSTask:Competency {id: "KSAT-103"})
+CREATE (job1)-[:INCLUDES_KSATS]->(ksat3);
 
 MATCH
-  (wr2:WorkRole:Framework {id: "WR-OM-TS-001"}),
-  (fc2:FunctionalCommunity:Competency {id: "FC-COMP-002"})
-CREATE
-  (wr2)-
-    [:REQUIRES {
-        rationale:
-          "Technical support specialists must understand security architecture.",
-        criticality: "Medium"
-      }]->
-  (fc2);
+  (job2:Job:Competency {id: "WR-OM-TS-001"}),
+  (ksat4:KSATSSkill:Competency {id: "KSAT-104"})
+CREATE (job2)-[:INCLUDES_KSATS]->(ksat4);
+
+// Functional Community nodes are now handled as Framework level entities above
+
+// Updated Job and Work Role relationships
 
 MATCH
-  (wr3:WorkRole:Framework {id: "WR-SP-RD-001"}),
-  (fc3:FunctionalCommunity:Competency {id: "FC-COMP-003"})
-CREATE
-  (wr3)-
-    [:REQUIRES {
-        rationale: "R&D specialists need offensive security knowledge.",
-        criticality: "High"
-      }]->
-  (fc3);
+  (job1:Job:Competency {id: "WR-AN-EX-001"}),
+  (awr1:AdvancedWorkRole:Competency {id: "AdvancedWorkRole-102"})
+CREATE (job1)-[:REQUIRES]->(awr1);
 
 MATCH
-  (wr4:WorkRole:Framework {id: "WR-AN-TWA-001"}),
-  (fc4:FunctionalCommunity:Competency {id: "FC-COMP-004"})
-CREATE
-  (wr4)-
-    [:REQUIRES {
-        rationale: "Threat warning analysts contribute to policy development.",
-        criticality: "Medium"
-      }]->
-  (fc4);
+  (job2:Job:Competency {id: "WR-OM-TS-001"}),
+  (iwr1:IntermediateWorkRole:Competency {id: "IntermediateWorkRole-102"})
+CREATE (job2)-[:REQUIRES]->(iwr1);
 
-MATCH
-  (wr5:WorkRole:Framework {id: "WR-CO-CLO-002"}),
-  (fc5:FunctionalCommunity:Competency {id: "FC-COMP-005"})
-CREATE
-  (wr5)-
-    [:REQUIRES {
-        rationale: "Cyber operators must analyze threat intelligence.",
-        criticality: "High"
-      }]->
-  (fc5);
-
-// Workforce Element Nodes
-
-CREATE
-  (wfe1:WorkforceElement:Competency
-    {
-      id: "WFE-COMP-001",
-      name: "Cyber Effects Operations",
-      description:
-        "Knowledge of offensive and defensive cyber operations principles and techniques.",
-      competencyStatement:
-        "Understanding of cyber effects operations in tactical environments.",
-      resourceAssociation: ["https://resources.cyber/wfe1"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "WFE-OPS-001",
-      competencyLevel: "Advanced",
-      typeLabel: "Operational",
-      typeUri: "https://types.cyber/operational",
-      PROFILE: ["WorkforceElement", "Competency"],
-      domain: "DCWF"
-    })
-
-CREATE
-  (wfe2:WorkforceElement:Competency
-    {
-      id: "WFE-COMP-002",
-      name: "Cyber Intelligence Analysis",
-      description:
-        "Ability to collect, analyze, and interpret cyber intelligence to support decision-making.",
-      competencyStatement:
-        "Can analyze cyber intelligence to produce actionable insights.",
-      resourceAssociation: ["https://resources.cyber/wfe2"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "WFE-INT-002",
-      competencyLevel: "Expert",
-      typeLabel: "Technical",
-      typeUri: "https://types.cyber/technical",
-      PROFILE: ["WorkforceElement", "Competency"],
-      domain: "DCWF"
-    })
-
-CREATE
-  (wfe3:WorkforceElement:Competency
-    {
-      id: "WFE-COMP-003",
-      name: "Cyber IT Infrastructure Management",
-      description:
-        "Ability to manage and secure cyber IT infrastructure components.",
-      competencyStatement:
-        "Can manage complex IT infrastructures with security controls.",
-      resourceAssociation: ["https://resources.cyber/wfe3"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "WFE-ITM-003",
-      competencyLevel: "Intermediate",
-      typeLabel: "Management",
-      typeUri: "https://types.cyber/management",
-      PROFILE: ["WorkforceElement", "Competency"],
-      domain: "DCWF"
-    })
-
-CREATE
-  (wfe4:WorkforceElement:Competency
-    {
-      id: "WFE-COMP-004",
-      name: "Cyber Defense Strategy",
-      description:
-        "Knowledge of strategic cyber defense principles and implementation approaches.",
-      competencyStatement:
-        "Can develop and implement comprehensive cyber defense strategies.",
-      resourceAssociation: ["https://resources.cyber/wfe4"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "WFE-DEF-004",
-      competencyLevel: "Advanced",
-      typeLabel: "Strategic",
-      typeUri: "https://types.cyber/strategic",
-      PROFILE: ["WorkforceElement", "Competency"],
-      domain: "DCWF"
-    })
-
-CREATE
-  (wfe5:WorkforceElement:Competency
-    {
-      id: "WFE-COMP-005",
-      name: "Cyber Risk Management",
-      description:
-        "Ability to identify, assess, and mitigate cyber risks across the organization.",
-      competencyStatement:
-        "Can perform enterprise-level cyber risk management activities.",
-      resourceAssociation: ["https://resources.cyber/wfe5"],
-      competencyFramework: ["https://frameworks.cyber/dcwf"],
-      referenceCode: "WFE-RSK-005",
-      competencyLevel: "Expert",
-      typeLabel: "Management",
-      typeUri: "https://types.cyber/management",
-      PROFILE: ["WorkforceElement", "Competency"],
-      domain: "DCWF"
-    });
-
-// Create DEPENDS_ON and IS_PART_OF relationships between WorkforceElement:Competency and FunctionalCommunity:Competency
-
-MATCH
-  (wfe1:WorkforceElement:Competency {id: "WFE-COMP-001"}),
-  (fc1:FunctionalCommunity:Competency {id: "FC-COMP-001"})
-CREATE
-  (wfe1)-
-    [:DEPENDS_ON {note: "Cyber Effects Operations depends on Threat Hunting"}]->
-  (fc1),
-  (fc1)-
-    [:IS_PART_OF {note: "Threat Hunting is part of Cyber Effects Operations"}]->
-  (wfe1);
-
-MATCH
-  (wfe2:WorkforceElement:Competency {id: "WFE-COMP-002"}),
-  (fc2:FunctionalCommunity:Competency {id: "FC-COMP-002"})
-CREATE
-  (wfe2)-
-    [:DEPENDS_ON {
-        note:
-          "Cyber Intelligence Analysis depends on Security Architecture Design"
-      }]->
-  (fc2),
-  (fc2)-
-    [:IS_PART_OF {
-        note:
-          "Security Architecture Design is part of Cyber Intelligence Analysis"
-      }]->
-  (wfe2);
-
-MATCH
-  (wfe3:WorkforceElement:Competency {id: "WFE-COMP-003"}),
-  (fc3:FunctionalCommunity:Competency {id: "FC-COMP-003"})
-CREATE
-  (wfe3)-
-    [:DEPENDS_ON {
-        note:
-          "Cyber IT Infrastructure Management depends on Offensive Security Operations"
-      }]->
-  (fc3),
-  (fc3)-
-    [:IS_PART_OF {
-        note:
-          "Offensive Security Operations is part of Cyber IT Infrastructure Management"
-      }]->
-  (wfe3);
-
-MATCH
-  (wfe4:WorkforceElement:Competency {id: "WFE-COMP-004"}),
-  (fc4:FunctionalCommunity:Competency {id: "FC-COMP-004"})
-CREATE
-  (wfe4)-
-    [:DEPENDS_ON {
-        note: "Cyber Defense Strategy depends on Cyber Policy Development"
-      }]->
-  (fc4),
-  (fc4)-
-    [:IS_PART_OF {
-        note: "Cyber Policy Development is part of Cyber Defense Strategy"
-      }]->
-  (wfe4);
-
-MATCH
-  (wfe5:WorkforceElement:Competency {id: "WFE-COMP-005"}),
-  (fc5:FunctionalCommunity:Competency {id: "FC-COMP-005"})
-CREATE
-  (wfe5)-
-    [:DEPENDS_ON {
-        note: "Cyber Risk Management depends on Threat Intelligence Analysis"
-      }]->
-  (fc5),
-  (fc5)-
-    [:IS_PART_OF {
-        note: "Threat Intelligence Analysis is part of Cyber Risk Management"
-      }]->
-  (wfe5);
+// WorkforceElement nodes are now handled as Framework level entities above
 
 // Create 5 DCWFCompetency:Competency nodes using the CompetencyDefinition schema
 
@@ -717,59 +375,32 @@ CREATE
       domain: "DCWF"
     });
 
-// Create INCLUDES_COMPETENCY relationships between KSATS:Competency and DCWFCompetency:Competency
+// Create REQUIRES_COMPETENCY relationships between KSATS:Competency and DCWFCompetency:Competency
 
 MATCH
   (ksat1:KSATS:Competency {id: "KSAT-101"}),
   (dcwf1:DCWFCompetency:Competency {id: "DCWF-COMP-001"})
-CREATE
-  (ksat1)-
-    [:INCLUDES_COMPETENCY {
-        note: "Network Traffic Analysis includes Network Security Monitoring"
-      }]->
-  (dcwf1);
+CREATE (ksat1)-[:REQUIRES_COMPETENCY]->(dcwf1);
 
 MATCH
   (ksat2:KSATS:Competency {id: "KSAT-102"}),
   (dcwf2:DCWFCompetency:Competency {id: "DCWF-COMP-002"})
-CREATE
-  (ksat2)-
-    [:INCLUDES_COMPETENCY {
-        note:
-          "Malware Reverse Engineering includes Incident Response Management"
-      }]->
-  (dcwf2);
+CREATE (ksat2)-[:REQUIRES_COMPETENCY]->(dcwf2);
 
 MATCH
   (ksat3:KSATS:Competency {id: "KSAT-103"}),
   (dcwf3:DCWFCompetency:Competency {id: "DCWF-COMP-003"})
-CREATE
-  (ksat3)-
-    [:INCLUDES_COMPETENCY {
-        note: "Incident Response Coordination includes Vulnerability Assessment"
-      }]->
-  (dcwf3);
+CREATE (ksat3)-[:REQUIRES_COMPETENCY]->(dcwf3);
 
 MATCH
   (ksat4:KSATS:Competency {id: "KSAT-104"}),
   (dcwf4:DCWFCompetency:Competency {id: "DCWF-COMP-004"})
-CREATE
-  (ksat4)-
-    [:INCLUDES_COMPETENCY {
-        note:
-          "Vulnerability Assessment includes Cybersecurity Policy Development"
-      }]->
-  (dcwf4);
+CREATE (ksat4)-[:REQUIRES_COMPETENCY]->(dcwf4);
 
 MATCH
   (ksat5:KSATS:Competency {id: "KSAT-105"}),
   (dcwf5:DCWFCompetency:Competency {id: "DCWF-COMP-005"})
-CREATE
-  (ksat5)-
-    [:INCLUDES_COMPETENCY {
-        note: "Security Policy Development includes Risk Management"
-      }]->
-  (dcwf5);
+CREATE (ksat5)-[:REQUIRES_COMPETENCY]->(dcwf5);
 
 // DOTE Domain Instance Sample Dataset
 
@@ -779,19 +410,17 @@ CREATE
     {
       id: "comp_framework_1",
       name: "Operating Environment and System Design",
-      authoritative_source: "DoD T&E Framework",
-      resource_association: "DoD_Systems_Engineering",
+      authoritative_source: "https://us.gov/DoD_T&E_Framework.doc",
       description:
         "Understand and communicate joint warfighting concepts, CONEMP/CONOPS and TTP for DoD systems, including but not limited to the CONOP/CONEMP, TTP, and capabilities of opposing forces. Contextualize DoD system design requirements with respect to the operational mission and the intended operating environment.",
       start_date: datetime("2024-01-01T00:00:00Z"),
       end_date: datetime("2025-12-31T23:59:59Z"),
-      association: "DoD_Test_Evaluation",
       PROFILE: "DOT&E"
     })
 
 // Create Competency 1.1 - Mission
 CREATE
-  (c1:Competency:DOTE_KSAT
+  (c1:Competency:DoteKsat
     {
       id: "comp_1_1",
       name: "Mission Understanding",
@@ -799,19 +428,18 @@ CREATE
         "Understands and communicates CONEMP/CONOPS, TTP, and how (Services, Joint) units/forces equipped with DoD system are intended to contribute to the warfighter's/joint force mission. Considers DoD systems in the context of kill-webs, mission threads and other operationally relevant and realistic system-of-system mission scenarios.",
       competency_statement:
         "Understands and communicates CONEMP/CONOPS, TTP, and warfighter mission contribution",
-      competency_framework: "Operating Environment and System Design",
-      resource_association: "Mission_Planning_Systems",
-      reference_code: "1.1",
-      competency_level: "Intermediate",
-      type_label: "Mission",
-      type_uri: "http://competency.dod.mil/mission",
+      competency_framework: "comp_framework_1",
+      resource_association: "https://us.gov/courses/Mission_Planning_Systems",
+      type_label: "Knowledge",
+      type_uri: "http://competency.dod.mil/knowledge",
       PROFILE: "KSAT",
       ksat_type: "Knowledge"
     })
 
+// The rest of the Competencies can follow the model above
 // Create Competency 1.2 - COIs
 CREATE
-  (c2:Competency:DOTE_KSAT
+  (c2:Competency:DoteKsat
     {
       id: "comp_1_2",
       name: "Conditions of Interest (COIs)",
@@ -821,8 +449,6 @@ CREATE
         "Understands COIs and operational factors affecting DoD systems",
       competency_framework: "Operating Environment and System Design",
       resource_association: "Environmental_Assessment_Tools",
-      reference_code: "1.2",
-      competency_level: "Intermediate",
       type_label: "COIs",
       type_uri: "http://competency.dod.mil/cois",
       PROFILE: "KSAT",
@@ -831,7 +457,7 @@ CREATE
 
 // Create Competency 1.3 - DoD System
 CREATE
-  (c3:Competency:DOTE_KSAT
+  (c3:Competency:DoteKsat
     {
       id: "comp_1_3",
       name: "DoD System Understanding",
@@ -841,8 +467,6 @@ CREATE
         "Understands DoD systems architecture and mission critical functions",
       competency_framework: "Operating Environment and System Design",
       resource_association: "Systems_Architecture_Documentation",
-      reference_code: "1.3",
-      competency_level: "Advanced",
       type_label: "DoD System",
       type_uri: "http://competency.dod.mil/system",
       PROFILE: "KSAT",
@@ -851,7 +475,7 @@ CREATE
 
 // Create Competency 1.4 - User
 CREATE
-  (c4:Competency:DOTE_KSAT
+  (c4:Competency:DoteKsat
     {
       id: "comp_1_4",
       name: "User Mission and Training",
@@ -861,8 +485,6 @@ CREATE
         "Understands user operations and human-system interface requirements",
       competency_framework: "Operating Environment and System Design",
       resource_association: "Human_Factors_Engineering",
-      reference_code: "1.4",
-      competency_level: "Intermediate",
       type_label: "User",
       type_uri: "http://competency.dod.mil/user",
       PROFILE: "KSAT",
@@ -871,7 +493,7 @@ CREATE
 
 // Create Competency 1.5 - Opposing Forces
 CREATE
-  (c5:Competency:DOTE_KSAT
+  (c5:Competency:DoteKsat
     {
       id: "comp_1_5",
       name: "Opposing Forces Understanding",
@@ -881,81 +503,22 @@ CREATE
         "Maintains operational understanding of adversary capabilities and threat landscape",
       competency_framework: "Operating Environment and System Design",
       resource_association: "Intelligence_Community_Resources",
-      reference_code: "1.5",
-      competency_level: "Advanced",
       type_label: "Opposing Forces",
       type_uri: "http://competency.dod.mil/threats",
       PROFILE: "KSAT",
       ksat_type: "Ability"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Intermediate",
-        assessment_method: "Performance_Based",
-        training_hours: 40,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c1)
+// Create HAS_COMPETENCY relationships
+CREATE (f)-[:HAS_COMPETENCY]->(c1)
 
-CREATE
-  (f)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Intermediate",
-        assessment_method: "Knowledge_Based",
-        training_hours: 32,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c2)
+CREATE (f)-[:HAS_COMPETENCY]->(c2)
 
-CREATE
-  (f)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "Performance_Based",
-        training_hours: 60,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c3)
+CREATE (f)-[:HAS_COMPETENCY]->(c3)
 
-CREATE
-  (f)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Intermediate",
-        assessment_method: "Mixed_Assessment",
-        training_hours: 45,
-        certification_required: false,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4)
+CREATE (f)-[:HAS_COMPETENCY]->(c4)
 
-CREATE
-  (f)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "Intelligence_Briefing",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c5)
-
-//  Framework 2
+CREATE (f)-[:HAS_COMPETENCY]->(c5)
 
 // Create Framework #2
 CREATE
@@ -975,7 +538,7 @@ CREATE
 
 // Create Competency 2.1 - Acquisition Strategy
 CREATE
-  (c21:Competency:DOTE_KSAT
+  (c21:Competency:DoteKsat
     {
       id: "comp_2_1",
       name: "Acquisition Strategy",
@@ -985,8 +548,6 @@ CREATE
         "Understands acquisition strategy intent and its application to T&E planning",
       competency_framework: "Acquisition and Requirements Process",
       resource_association: "Acquisition_Strategy_Documentation",
-      reference_code: "2.1",
-      competency_level: "Advanced",
       type_label: "Acquisition Strategy",
       type_uri: "http://competency.dod.mil/acquisition_strategy",
       PROFILE: "KSAT",
@@ -995,7 +556,7 @@ CREATE
 
 // Create Competency 2.2 - Acquisition Pathway
 CREATE
-  (c22:Competency:DOTE_KSAT
+  (c22:Competency:DoteKsat
     {
       id: "comp_2_2",
       name: "Acquisition Pathway",
@@ -1005,8 +566,6 @@ CREATE
         "Understands acquisition pathways and appropriate test data requirements",
       competency_framework: "Acquisition and Requirements Process",
       resource_association: "Adaptive_Acquisition_Framework",
-      reference_code: "2.2",
-      competency_level: "Advanced",
       type_label: "Acquisition Pathway",
       type_uri: "http://competency.dod.mil/acquisition_pathway",
       PROFILE: "KSAT",
@@ -1015,7 +574,7 @@ CREATE
 
 // Create Competency 2.3 - Acquisition Management
 CREATE
-  (c23:Competency:DOTE_KSAT
+  (c23:Competency:DoteKsat
     {
       id: "comp_2_3",
       name: "Acquisition Management",
@@ -1025,8 +584,6 @@ CREATE
         "Understands acquisition roles and demonstrates leadership skills to influence management",
       competency_framework: "Acquisition and Requirements Process",
       resource_association: "Acquisition_Management_Systems",
-      reference_code: "2.3",
-      competency_level: "Expert",
       type_label: "Acquisition Management",
       type_uri: "http://competency.dod.mil/acquisition_management",
       PROFILE: "KSAT",
@@ -1035,7 +592,7 @@ CREATE
 
 // Create Competency 2.4 - Contracting
 CREATE
-  (c24:Competency:DOTE_KSAT
+  (c24:Competency:DoteKsat
     {
       id: "comp_2_4",
       name: "Contracting",
@@ -1045,8 +602,6 @@ CREATE
         "Understands contracting processes for T&E requirements and data access",
       competency_framework: "Acquisition and Requirements Process",
       resource_association: "Contracting_Systems",
-      reference_code: "2.4",
-      competency_level: "Advanced",
       type_label: "Contracting",
       type_uri: "http://competency.dod.mil/contracting",
       PROFILE: "KSAT",
@@ -1055,7 +610,7 @@ CREATE
 
 // Create Competency 2.5 - Requirements
 CREATE
-  (c25:Competency:DOTE_KSAT
+  (c25:Competency:DoteKsat
     {
       id: "comp_2_5",
       name: "Requirements",
@@ -1065,81 +620,22 @@ CREATE
         "Supports DOT&E advisory role and influences requirements development",
       competency_framework: "Acquisition and Requirements Process",
       resource_association: "JROC_Requirements_Process",
-      reference_code: "2.5",
-      competency_level: "Expert",
       type_label: "Requirements",
       type_uri: "http://competency.dod.mil/requirements",
       PROFILE: "KSAT",
       ksat_type: "Ability"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f2)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Advanced",
-        assessment_method: "Portfolio_Review",
-        training_hours: 50,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c21)
+// Create HAS_COMPETENCY relationships
+CREATE (f2)-[:HAS_COMPETENCY]->(c21)
 
-CREATE
-  (f2)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "Case_Study_Analysis",
-        training_hours: 45,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c22)
+CREATE (f2)-[:HAS_COMPETENCY]->(c22)
 
-CREATE
-  (f2)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Expert",
-        assessment_method: "Leadership_Assessment",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c23)
+CREATE (f2)-[:HAS_COMPETENCY]->(c23)
 
-CREATE
-  (f2)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Advanced",
-        assessment_method: "Contract_Analysis",
-        training_hours: 60,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c24)
+CREATE (f2)-[:HAS_COMPETENCY]->(c24)
 
-CREATE
-  (f2)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Expert",
-        assessment_method: "Requirements_Review",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c25)
-
-//  Framework 3
+CREATE (f2)-[:HAS_COMPETENCY]->(c25)
 
 // Create Framework #3
 CREATE
@@ -1159,7 +655,7 @@ CREATE
 
 // Create Competency 3.1 - Policy Compliance
 CREATE
-  (c31:Competency:DOTE_KSAT
+  (c31:Competency:DoteKsat
     {
       id: "comp_3_1",
       name: "Policy Compliance",
@@ -1169,8 +665,6 @@ CREATE
         "Understands, implements, and ensures DoD policy compliance for T&E programs",
       competency_framework: "Policy Development and Implementation",
       resource_association: "DoD_Policy_Database",
-      reference_code: "3.1",
-      competency_level: "Advanced",
       type_label: "Policy Compliance",
       type_uri: "http://competency.dod.mil/policy_compliance",
       PROFILE: "KSAT",
@@ -1179,7 +673,7 @@ CREATE
 
 // Create Competency 3.2 - Policy Development
 CREATE
-  (c32:Competency:DOTE_KSAT
+  (c32:Competency:DoteKsat
     {
       id: "comp_3_2",
       name: "Policy Development",
@@ -1189,8 +683,6 @@ CREATE
         "Identifies policy gaps and offers solutions to DOT&E policy development team",
       competency_framework: "Policy Development and Implementation",
       resource_association: "Policy_Development_SOPs",
-      reference_code: "3.2",
-      competency_level: "Expert",
       type_label: "Policy Development",
       type_uri: "http://competency.dod.mil/policy_development",
       PROFILE: "KSAT",
@@ -1199,7 +691,7 @@ CREATE
 
 // Create Competency 3.3 - Policy Adoption
 CREATE
-  (c33:Competency:DOTE_KSAT
+  (c33:Competency:DoteKsat
     {
       id: "comp_3_3",
       name: "Policy Adoption",
@@ -1209,8 +701,6 @@ CREATE
         "Offers use cases for piloting new policy and drafts policy language",
       competency_framework: "Policy Development and Implementation",
       resource_association: "Policy_Pilot_Programs",
-      reference_code: "3.3",
-      competency_level: "Expert",
       type_label: "Policy Adoption",
       type_uri: "http://competency.dod.mil/policy_adoption",
       PROFILE: "KSAT",
@@ -1219,7 +709,7 @@ CREATE
 
 // Create Competency 3.4 - Policy Awareness
 CREATE
-  (c34:Competency:DOTE_KSAT
+  (c34:Competency:DoteKsat
     {
       id: "comp_3_4",
       name: "Policy Awareness",
@@ -1229,68 +719,20 @@ CREATE
         "Maintains awareness of policy trends and emerging technology T&E policy",
       competency_framework: "Policy Development and Implementation",
       resource_association: "Policy_Intelligence_Systems",
-      reference_code: "3.4",
-      competency_level: "Advanced",
       type_label: "Policy Awareness",
       type_uri: "http://competency.dod.mil/policy_awareness",
       PROFILE: "KSAT",
       ksat_type: "Knowledge"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f3)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Advanced",
-        assessment_method: "Compliance_Audit",
-        training_hours: 45,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c31)
+// Create HAS_COMPETENCY relationships
+CREATE (f3)-[:HAS_COMPETENCY]->(c31)
 
-CREATE
-  (f3)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Expert",
-        assessment_method: "Policy_Development_Portfolio",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c32)
+CREATE (f3)-[:HAS_COMPETENCY]->(c32)
 
-CREATE
-  (f3)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Expert",
-        assessment_method: "Policy_Drafting_Exercise",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c33)
+CREATE (f3)-[:HAS_COMPETENCY]->(c33)
 
-CREATE
-  (f3)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Advanced",
-        assessment_method: "Environmental_Scanning",
-        training_hours: 40,
-        certification_required: false,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c34)
-
-// Framework 4
+CREATE (f3)-[:HAS_COMPETENCY]->(c34)
 
 // Create Framework #4
 CREATE
@@ -1310,7 +752,7 @@ CREATE
 
 // Create Competency 4.1 - Science and Technology
 CREATE
-  (c41:Competency:DOTE_KSAT
+  (c41:Competency:DoteKsat
     {
       id: "comp_4_1",
       name: "Science and Technology",
@@ -1320,8 +762,6 @@ CREATE
         "Applies latest science and technology advances to optimize T&E across acquisition lifecycle",
       competency_framework: "Test Planning, Execution, and Evaluation",
       resource_association: "Science_Technology_Tools",
-      reference_code: "4.1",
-      competency_level: "Expert",
       type_label: "Science and Technology",
       type_uri: "http://competency.dod.mil/science_technology",
       PROFILE: "KSAT",
@@ -1330,7 +770,7 @@ CREATE
 
 // Create Competency 4.2 - Risk Assessment
 CREATE
-  (c42:Competency:DOTE_KSAT
+  (c42:Competency:DoteKsat
     {
       id: "comp_4_2",
       name: "Risk Assessment",
@@ -1340,8 +780,6 @@ CREATE
         "Executes risk-based assessments and maps test strategies to IDSK for acquisition decisions",
       competency_framework: "Test Planning, Execution, and Evaluation",
       resource_association: "Risk_Assessment_Tools",
-      reference_code: "4.2",
-      competency_level: "Advanced",
       type_label: "Risk Assessment",
       type_uri: "http://competency.dod.mil/risk_assessment",
       PROFILE: "KSAT",
@@ -1350,7 +788,7 @@ CREATE
 
 // Create Competency 4.3 - TEMP/T&E Strategy Development
 CREATE
-  (c43:Competency:DOTE_KSAT
+  (c43:Competency:DoteKsat
     {
       id: "comp_4_3",
       name: "TEMP/T&E Strategy Development",
@@ -1360,8 +798,6 @@ CREATE
         "Implements TEMP/T&E strategy policy and justifies OT&E and LFT&E scope",
       competency_framework: "Test Planning, Execution, and Evaluation",
       resource_association: "TEMP_Development_Tools",
-      reference_code: "4.3",
-      competency_level: "Advanced",
       type_label: "TEMP/T&E Strategy Development",
       type_uri: "http://competency.dod.mil/temp_strategy",
       PROFILE: "KSAT",
@@ -1370,7 +806,7 @@ CREATE
 
 // Create Competency 4.4 - Test and M&S V&V Plan Development
 CREATE
-  (c44:Competency:DOTE_KSAT
+  (c44:Competency:DoteKsat
     {
       id: "comp_4_4",
       name: "Test and M&S V&V Plan Development",
@@ -1380,8 +816,6 @@ CREATE
         "Develops science-based test and M&S V&V plans with operationally relevant conditions",
       competency_framework: "Test Planning, Execution, and Evaluation",
       resource_association: "Test_Planning_Tools",
-      reference_code: "4.4",
-      competency_level: "Advanced",
       type_label: "Test and M&S V&V Plan Development",
       type_uri: "http://competency.dod.mil/test_plan_development",
       PROFILE: "KSAT",
@@ -1390,7 +824,7 @@ CREATE
 
 // Create Competency 4.5 - Execution
 CREATE
-  (c45:Competency:DOTE_KSAT
+  (c45:Competency:DoteKsat
     {
       id: "comp_4_5",
       name: "Execution",
@@ -1400,8 +834,6 @@ CREATE
         "Ensures test execution compliance and confirms plan requirement satisfaction",
       competency_framework: "Test Planning, Execution, and Evaluation",
       resource_association: "Test_Execution_Systems",
-      reference_code: "4.5",
-      competency_level: "Advanced",
       type_label: "Execution",
       type_uri: "http://competency.dod.mil/test_execution",
       PROFILE: "KSAT",
@@ -1410,7 +842,7 @@ CREATE
 
 // Create Competency 4.6 - Evaluation
 CREATE
-  (c46:Competency:DOTE_KSAT
+  (c46:Competency:DoteKsat
     {
       id: "comp_4_6",
       name: "Evaluation",
@@ -1420,94 +852,24 @@ CREATE
         "Uses science-based analytical methods for real-time test data analysis",
       competency_framework: "Test Planning, Execution, and Evaluation",
       resource_association: "Data_Analysis_Tools",
-      reference_code: "4.6",
-      competency_level: "Expert",
       type_label: "Evaluation",
       type_uri: "http://competency.dod.mil/test_evaluation",
       PROFILE: "KSAT",
       ksat_type: "Ability"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f4)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Expert",
-        assessment_method: "Technical_Portfolio",
-        training_hours: 100,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c41)
+// Create HAS_COMPETENCY relationships
+CREATE (f4)-[:HAS_COMPETENCY]->(c41)
 
-CREATE
-  (f4)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "Risk_Assessment_Exercise",
-        training_hours: 60,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c42)
+CREATE (f4)-[:HAS_COMPETENCY]->(c42)
 
-CREATE
-  (f4)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "TEMP_Development",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c43)
+CREATE (f4)-[:HAS_COMPETENCY]->(c43)
 
-CREATE
-  (f4)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Advanced",
-        assessment_method: "Plan_Development_Exercise",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c44)
+CREATE (f4)-[:HAS_COMPETENCY]->(c44)
 
-CREATE
-  (f4)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "Test_Execution_Observation",
-        training_hours: 65,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c45)
+CREATE (f4)-[:HAS_COMPETENCY]->(c45)
 
-CREATE
-  (f4)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Expert",
-        assessment_method: "Data_Analysis_Demonstration",
-        training_hours: 90,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c46)
-
-//  Framework 4a
+CREATE (f4)-[:HAS_COMPETENCY]->(c46)
 
 // Create Framework #4A
 CREATE
@@ -1527,7 +889,7 @@ CREATE
 
 // Create Competency 4A.1 - T&E Data Strategy and Management
 CREATE
-  (c4a1:Competency:DOTE_KSAT
+  (c4a1:Competency:DoteKsat
     {
       id: "comp_4a_1",
       name: "T&E Data Strategy and Management",
@@ -1537,8 +899,6 @@ CREATE
         "Understands DoD data management strategy and ensures adequate program data management plans",
       competency_framework: "Data Management and Reporting",
       resource_association: "DoD_Data_Strategy_Systems",
-      reference_code: "4A.1",
-      competency_level: "Advanced",
       type_label: "T&E Data Strategy and Management",
       type_uri: "http://competency.dod.mil/data_strategy",
       PROFILE: "KSAT",
@@ -1547,7 +907,7 @@ CREATE
 
 // Create Competency 4A.2 - DOT&E Data and Knowledge Management
 CREATE
-  (c4a2:Competency:DOTE_KSAT
+  (c4a2:Competency:DoteKsat
     {
       id: "comp_4a_2",
       name: "DOT&E Data and Knowledge Management",
@@ -1557,8 +917,6 @@ CREATE
         "Manages DOT&E data storage and develops comprehensive T&E evaluation reports",
       competency_framework: "Data Management and Reporting",
       resource_association: "DOT&E_Data_Management_Platform",
-      reference_code: "4A.2",
-      competency_level: "Advanced",
       type_label: "DOT&E Data and Knowledge Management",
       type_uri: "http://competency.dod.mil/dote_data_management",
       PROFILE: "KSAT",
@@ -1567,7 +925,7 @@ CREATE
 
 // Create Competency 4A.3 - Technical Writing and Reporting
 CREATE
-  (c4a3:Competency:DOTE_KSAT
+  (c4a3:Competency:DoteKsat
     {
       id: "comp_4a_3",
       name: "Technical Writing and Reporting",
@@ -1577,8 +935,6 @@ CREATE
         "Creates clear technical T&E documentation and defends conclusions and recommendations",
       competency_framework: "Data Management and Reporting",
       resource_association: "Technical_Writing_Tools",
-      reference_code: "4A.3",
-      competency_level: "Advanced",
       type_label: "Technical Writing and Reporting",
       type_uri: "http://competency.dod.mil/technical_writing",
       PROFILE: "KSAT",
@@ -1587,7 +943,7 @@ CREATE
 
 // Create Competency 4A.4 - Communication
 CREATE
-  (c4a4:Competency:DOTE_KSAT
+  (c4a4:Competency:DoteKsat
     {
       id: "comp_4a_4",
       name: "Communication",
@@ -1597,8 +953,6 @@ CREATE
         "Delivers clear technical presentations tailored to diverse stakeholder audiences",
       competency_framework: "Data Management and Reporting",
       resource_association: "Presentation_Tools",
-      reference_code: "4A.4",
-      competency_level: "Expert",
       type_label: "Communication",
       type_uri: "http://competency.dod.mil/technical_communication",
       PROFILE: "KSAT",
@@ -1607,7 +961,7 @@ CREATE
 
 // Create Competency 4A.5 - Information Security
 CREATE
-  (c4a5:Competency:DOTE_KSAT
+  (c4a5:Competency:DoteKsat
     {
       id: "comp_4a_5",
       name: "Information Security",
@@ -1617,81 +971,22 @@ CREATE
         "Protects classified information and prevents security incidents per DoD policy",
       competency_framework: "Data Management and Reporting",
       resource_association: "Information_Security_Systems",
-      reference_code: "4A.5",
-      competency_level: "Advanced",
       type_label: "Information Security",
       type_uri: "http://competency.dod.mil/information_security",
       PROFILE: "KSAT",
       ksat_type: "Knowledge"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f4a)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Advanced",
-        assessment_method: "Data_Strategy_Review",
-        training_hours: 55,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4a1)
+// Create HAS_COMPETENCY relationships
+CREATE (f4a)-[:HAS_COMPETENCY]->(c4a1)
 
-CREATE
-  (f4a)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "Data_Management_Exercise",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4a2)
+CREATE (f4a)-[:HAS_COMPETENCY]->(c4a2)
 
-CREATE
-  (f4a)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "Report_Writing_Portfolio",
-        training_hours: 50,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4a3)
+CREATE (f4a)-[:HAS_COMPETENCY]->(c4a3)
 
-CREATE
-  (f4a)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Expert",
-        assessment_method: "Stakeholder_Presentation",
-        training_hours: 60,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4a4)
+CREATE (f4a)-[:HAS_COMPETENCY]->(c4a4)
 
-CREATE
-  (f4a)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "Security_Compliance_Audit",
-        training_hours: 40,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4a5)
-
-//  Framework 4B
+CREATE (f4a)-[:HAS_COMPETENCY]->(c4a5)
 
 // Create Framework #4B
 CREATE
@@ -1711,7 +1006,7 @@ CREATE
 
 // Create Competency 4B.1 - IDSK
 CREATE
-  (c4b1:Competency:DOTE_KSAT
+  (c4b1:Competency:DoteKsat
     {
       id: "comp_4b_1",
       name: "IDSK",
@@ -1721,8 +1016,6 @@ CREATE
         "Identifies and codifies integrated T&E data to inform acquisition decisions",
       competency_framework: "TEMP/T&E Strategy Development",
       resource_association: "IDSK_Management_Systems",
-      reference_code: "4B.1",
-      competency_level: "Advanced",
       type_label: "IDSK",
       type_uri: "http://competency.dod.mil/idsk",
       PROFILE: "KSAT",
@@ -1731,7 +1024,7 @@ CREATE
 
 // Create Competency 4B.2 - OT&E
 CREATE
-  (c4b2:Competency:DOTE_KSAT
+  (c4b2:Competency:DoteKsat
     {
       id: "comp_4b_2",
       name: "OT&E",
@@ -1741,8 +1034,6 @@ CREATE
         "Implements OT&E policy with scientific rigor in contested environments",
       competency_framework: "TEMP/T&E Strategy Development",
       resource_association: "OT&E_Planning_Systems",
-      reference_code: "4B.2",
-      competency_level: "Expert",
       type_label: "OT&E",
       type_uri: "http://competency.dod.mil/ote",
       PROFILE: "KSAT",
@@ -1751,7 +1042,7 @@ CREATE
 
 // Create Competency 4B.3 - LFT&E
 CREATE
-  (c4b3:Competency:DOTE_KSAT
+  (c4b3:Competency:DoteKsat
     {
       id: "comp_4b_3",
       name: "LFT&E",
@@ -1761,8 +1052,6 @@ CREATE
         "Implements LFT&E policy with scientific rigor for survivability and lethality evaluation",
       competency_framework: "TEMP/T&E Strategy Development",
       resource_association: "LFT&E_Planning_Systems",
-      reference_code: "4B.3",
-      competency_level: "Expert",
       type_label: "LFT&E",
       type_uri: "http://competency.dod.mil/lfte",
       PROFILE: "KSAT",
@@ -1771,7 +1060,7 @@ CREATE
 
 // Create Competency 4B.4 - M&S
 CREATE
-  (c4b4:Competency:DOTE_KSAT
+  (c4b4:Competency:DoteKsat
     {
       id: "comp_4b_4",
       name: "M&S",
@@ -1781,8 +1070,6 @@ CREATE
         "Implements scientifically rigorous M&S VV&A with uncertainty quantification",
       competency_framework: "TEMP/T&E Strategy Development",
       resource_association: "M&S_VV&A_Systems",
-      reference_code: "4B.4",
-      competency_level: "Expert",
       type_label: "M&S",
       type_uri: "http://competency.dod.mil/ms_vva",
       PROFILE: "KSAT",
@@ -1791,7 +1078,7 @@ CREATE
 
 // Create Competency 4B.5 - Resources
 CREATE
-  (c4b5:Competency:DOTE_KSAT
+  (c4b5:Competency:DoteKsat
     {
       id: "comp_4b_5",
       name: "Resources",
@@ -1801,8 +1088,6 @@ CREATE
         "Develops independent T&E concepts and identifies resource gaps for TEMP strategy",
       competency_framework: "TEMP/T&E Strategy Development",
       resource_association: "T&E_Resource_Management",
-      reference_code: "4B.5",
-      competency_level: "Advanced",
       type_label: "Resources",
       type_uri: "http://competency.dod.mil/te_resources",
       PROFILE: "KSAT",
@@ -1811,7 +1096,7 @@ CREATE
 
 // Create Competency 4B.6 - Cost
 CREATE
-  (c4b6:Competency:DOTE_KSAT
+  (c4b6:Competency:DoteKsat
     {
       id: "comp_4b_6",
       name: "Cost",
@@ -1821,94 +1106,24 @@ CREATE
         "Provides independent cost assessments for T&E strategy adequacy evaluation",
       competency_framework: "TEMP/T&E Strategy Development",
       resource_association: "Cost_Analysis_Tools",
-      reference_code: "4B.6",
-      competency_level: "Advanced",
       type_label: "Cost",
       type_uri: "http://competency.dod.mil/te_cost",
       PROFILE: "KSAT",
       ksat_type: "Skill"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f4b)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Advanced",
-        assessment_method: "IDSK_Development_Exercise",
-        training_hours: 65,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4b1)
+// Create HAS_COMPETENCY relationships
+CREATE (f4b)-[:HAS_COMPETENCY]->(c4b1)
 
-CREATE
-  (f4b)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Expert",
-        assessment_method: "OT&E_Plan_Development",
-        training_hours: 90,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4b2)
+CREATE (f4b)-[:HAS_COMPETENCY]->(c4b2)
 
-CREATE
-  (f4b)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Expert",
-        assessment_method: "LFT&E_Plan_Development",
-        training_hours: 90,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4b3)
+CREATE (f4b)-[:HAS_COMPETENCY]->(c4b3)
 
-CREATE
-  (f4b)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Expert",
-        assessment_method: "M&S_VV&A_Implementation",
-        training_hours: 85,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4b4)
+CREATE (f4b)-[:HAS_COMPETENCY]->(c4b4)
 
-CREATE
-  (f4b)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "Resource_Gap_Analysis",
-        training_hours: 55,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4b5)
+CREATE (f4b)-[:HAS_COMPETENCY]->(c4b5)
 
-CREATE
-  (f4b)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Advanced",
-        assessment_method: "Cost_Assessment_Exercise",
-        training_hours: 50,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4b6)
-
-//  Framework 4C
+CREATE (f4b)-[:HAS_COMPETENCY]->(c4b6)
 
 // Create Framework #4C
 CREATE
@@ -1928,7 +1143,7 @@ CREATE
 
 // Create Competency 4C.1 - M&S Intended Use
 CREATE
-  (c4c1:Competency:DOTE_KSAT
+  (c4c1:Competency:DoteKsat
     {
       id: "comp_4c_1",
       name: "M&S Intended Use",
@@ -1938,8 +1153,6 @@ CREATE
         "Understands M&S types and their application to T&E across acquisition lifecycle",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "M&S_Type_Classification",
-      reference_code: "4C.1",
-      competency_level: "Intermediate",
       type_label: "M&S Intended Use",
       type_uri: "http://competency.dod.mil/ms_intended_use",
       PROFILE: "KSAT",
@@ -1948,7 +1161,7 @@ CREATE
 
 // Create Competency 4C.2 - M&S Capability Assessment
 CREATE
-  (c4c2:Competency:DOTE_KSAT
+  (c4c2:Competency:DoteKsat
     {
       id: "comp_4c_2",
       name: "M&S Capability Assessment",
@@ -1958,8 +1171,6 @@ CREATE
         "Determines M&S feasibility and benefits for T&E support",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "M&S_Assessment_Tools",
-      reference_code: "4C.2",
-      competency_level: "Advanced",
       type_label: "M&S Capability Assessment",
       type_uri: "http://competency.dod.mil/ms_capability_assessment",
       PROFILE: "KSAT",
@@ -1968,7 +1179,7 @@ CREATE
 
 // Create Competency 4C.3 - M&S Management
 CREATE
-  (c4c3:Competency:DOTE_KSAT
+  (c4c3:Competency:DoteKsat
     {
       id: "comp_4c_3",
       name: "M&S Management",
@@ -1978,8 +1189,6 @@ CREATE
         "Understands M&S management roles and VV&A terminology",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "M&S_Management_Framework",
-      reference_code: "4C.3",
-      competency_level: "Intermediate",
       type_label: "M&S Management",
       type_uri: "http://competency.dod.mil/ms_management",
       PROFILE: "KSAT",
@@ -1988,7 +1197,7 @@ CREATE
 
 // Create Competency 4C.4 - M&S Requirements
 CREATE
-  (c4c4:Competency:DOTE_KSAT
+  (c4c4:Competency:DoteKsat
     {
       id: "comp_4c_4",
       name: "M&S Requirements",
@@ -1998,8 +1207,6 @@ CREATE
         "Assesses M&S VV&A requirements and data comparison criteria",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "M&S_Requirements_Tools",
-      reference_code: "4C.4",
-      competency_level: "Advanced",
       type_label: "M&S Requirements",
       type_uri: "http://competency.dod.mil/ms_requirements",
       PROFILE: "KSAT",
@@ -2008,7 +1215,7 @@ CREATE
 
 // Create Competency 4C.5 - M&S Planning and Analysis
 CREATE
-  (c4c5:Competency:DOTE_KSAT
+  (c4c5:Competency:DoteKsat
     {
       id: "comp_4c_5",
       name: "M&S Planning and Analysis",
@@ -2018,8 +1225,6 @@ CREATE
         "Applies statistical methods for M&S output analysis and uncertainty quantification",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "Statistical_Analysis_Tools",
-      reference_code: "4C.5",
-      competency_level: "Expert",
       type_label: "M&S Planning and Analysis",
       type_uri: "http://competency.dod.mil/ms_planning_analysis",
       PROFILE: "KSAT",
@@ -2028,7 +1233,7 @@ CREATE
 
 // Create Competency 4C.6 - M&S Independent Review
 CREATE
-  (c4c6:Competency:DOTE_KSAT
+  (c4c6:Competency:DoteKsat
     {
       id: "comp_4c_6",
       name: "M&S Independent Review",
@@ -2038,8 +1243,6 @@ CREATE
         "Conducts independent M&S VV&A review and analysis for DOT&E evaluations",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "M&S_Review_Framework",
-      reference_code: "4C.6",
-      competency_level: "Expert",
       type_label: "M&S Independent Review",
       type_uri: "http://competency.dod.mil/ms_independent_review",
       PROFILE: "KSAT",
@@ -2048,7 +1251,7 @@ CREATE
 
 // Create Competency 4C.7 - M&S Evaluation
 CREATE
-  (c4c7:Competency:DOTE_KSAT
+  (c4c7:Competency:DoteKsat
     {
       id: "comp_4c_7",
       name: "M&S Evaluation",
@@ -2058,107 +1261,26 @@ CREATE
         "Evaluates M&S data sufficiency and understands unvalidated M&S risks",
       competency_framework: "Modeling and Simulation VV&A",
       resource_association: "M&S_Evaluation_Tools",
-      reference_code: "4C.7",
-      competency_level: "Expert",
       type_label: "M&S Evaluation",
       type_uri: "http://competency.dod.mil/ms_evaluation",
       PROFILE: "KSAT",
       ksat_type: "Ability"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Intermediate",
-        assessment_method: "M&S_Knowledge_Assessment",
-        training_hours: 35,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c1)
+// Create HAS_COMPETENCY relationships
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c1)
 
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "Capability_Assessment_Exercise",
-        training_hours: 50,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c2)
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c2)
 
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Intermediate",
-        assessment_method: "Management_Framework_Review",
-        training_hours: 30,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c3)
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c3)
 
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Advanced",
-        assessment_method: "Requirements_Development",
-        training_hours: 65,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c4)
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c4)
 
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Expert",
-        assessment_method: "Statistical_Analysis_Portfolio",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c5)
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c5)
 
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Expert",
-        assessment_method: "Independent_Review_Process",
-        training_hours: 75,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c6)
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c6)
 
-CREATE
-  (f4c)-
-    [:HAS_COMPETENCY {
-        competency_order: 7,
-        proficiency_level: "Expert",
-        assessment_method: "M&S_Data_Evaluation",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4c7)
-
-//  Framework 4D
+CREATE (f4c)-[:HAS_COMPETENCY]->(c4c7)
 
 // Create Framework #4D
 CREATE
@@ -2178,7 +1300,7 @@ CREATE
 
 // Create Competency 4D.1 - Full Spectrum Survivability Kill Chain
 CREATE
-  (c4d1:Competency:DOTE_KSAT
+  (c4d1:Competency:DoteKsat
     {
       id: "comp_4d_1",
       name: "Full Spectrum Survivability Kill Chain",
@@ -2188,8 +1310,6 @@ CREATE
         "Evaluates full spectrum survivability kill chain with scientific rigor across lifecycle",
       competency_framework: "Full Spectrum Survivability and Lethality",
       resource_association: "Survivability_Kill_Chain_Tools",
-      reference_code: "4D.1",
-      competency_level: "Expert",
       type_label: "Full Spectrum Survivability Kill Chain",
       type_uri: "http://competency.dod.mil/survivability_kill_chain",
       PROFILE: "KSAT",
@@ -2198,7 +1318,7 @@ CREATE
 
 // Create Competency 4D.2 - Kinetic Threats T&E
 CREATE
-  (c4d2:Competency:DOTE_KSAT
+  (c4d2:Competency:DoteKsat
     {
       id: "comp_4d_2",
       name: "Kinetic Threats T&E",
@@ -2208,8 +1328,6 @@ CREATE
         "Applies survivability evaluation against kinetic threat effects in contested environment",
       competency_framework: "Full Spectrum Survivability and Lethality",
       resource_association: "Kinetic_Threat_Testing_Tools",
-      reference_code: "4D.2",
-      competency_level: "Advanced",
       type_label: "Kinetic Threats T&E",
       type_uri: "http://competency.dod.mil/kinetic_threats",
       PROFILE: "KSAT",
@@ -2218,7 +1336,7 @@ CREATE
 
 // Create Competency 4D.3 - Cyber T&E
 CREATE
-  (c4d3:Competency:DOTE_KSAT
+  (c4d3:Competency:DoteKsat
     {
       id: "comp_4d_3",
       name: "Cyber T&E",
@@ -2228,8 +1346,6 @@ CREATE
         "Applies survivability evaluation against cyberattacks in contested cyberspace",
       competency_framework: "Full Spectrum Survivability and Lethality",
       resource_association: "Cyber_Testing_Tools",
-      reference_code: "4D.3",
-      competency_level: "Advanced",
       type_label: "Cyber T&E",
       type_uri: "http://competency.dod.mil/cyber_te",
       PROFILE: "KSAT",
@@ -2238,18 +1354,16 @@ CREATE
 
 // Create Competency 4D.4 - EMSO T&E
 CREATE
-  (c4d4:Competency:DOTE_KSAT
+  (c4d4:Competency:DoteKsat
     {
       id: "comp_4d_4",
       name: "EMSO T&E",
       description:
-        "Understands and applies susceptibility (prevent), vulnerability (mitigate), user casualties (as applicable), recoverability (recover) and collateral damage to support survivability evaluation against electromagnetic spectrum fires (e.g., deny, degrade, disrupt, deceive, destroy, exploit, or influence, including cascading effects in the physical domains) in a contested and congested, and constrained EMSO. Includes directed energy: electromagnetic attack or spectrum effects such as wideband radio frequency, lasers; and high-power microwaves.",
+        "Understands and applies susceptibility (prevent), vulnerability (mitigate), user casualties (as applicable), recoverability (recover) and collateral damage to support survivability evaluation against electromagnetic spectrum fires (e.g., deny, degrade, disrupt, deceive, destroy, exploit, or influence, including cascading effects in the physical domains) in a contested and congested, and constrained EMSO). Includes directed energy: electromagnetic attack or spectrum effects such as wideband radio frequency, lasers; and high-power microwaves.",
       competency_statement:
         "Applies survivability evaluation against electromagnetic spectrum fires and directed energy",
       competency_framework: "Full Spectrum Survivability and Lethality",
       resource_association: "EMSO_Testing_Tools",
-      reference_code: "4D.4",
-      competency_level: "Advanced",
       type_label: "EMSO T&E",
       type_uri: "http://competency.dod.mil/emso_te",
       PROFILE: "KSAT",
@@ -2258,7 +1372,7 @@ CREATE
 
 // Create Competency 4D.5 - CBRN T&E
 CREATE
-  (c4d5:Competency:DOTE_KSAT
+  (c4d5:Competency:DoteKsat
     {
       id: "comp_4d_5",
       name: "CBRN T&E",
@@ -2268,8 +1382,6 @@ CREATE
         "Applies survivability evaluation against CBRN threats and nuclear effects",
       competency_framework: "Full Spectrum Survivability and Lethality",
       resource_association: "CBRN_Testing_Tools",
-      reference_code: "4D.5",
-      competency_level: "Advanced",
       type_label: "CBRN T&E",
       type_uri: "http://competency.dod.mil/cbrn_te",
       PROFILE: "KSAT",
@@ -2278,7 +1390,7 @@ CREATE
 
 // Create Competency 4D.6 - Lethality Kill Chain
 CREATE
-  (c4d6:Competency:DOTE_KSAT
+  (c4d6:Competency:DoteKsat
     {
       id: "comp_4d_6",
       name: "Lethality Kill Chain",
@@ -2288,94 +1400,24 @@ CREATE
         "Evaluates full spectrum lethality kill chain with scientific rigor across lifecycle",
       competency_framework: "Full Spectrum Survivability and Lethality",
       resource_association: "Lethality_Kill_Chain_Tools",
-      reference_code: "4D.6",
-      competency_level: "Expert",
       type_label: "Lethality Kill Chain",
       type_uri: "http://competency.dod.mil/lethality_kill_chain",
       PROFILE: "KSAT",
       ksat_type: "Ability"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f4d)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Expert",
-        assessment_method: "Survivability_Kill_Chain_Analysis",
-        training_hours: 100,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4d1)
+// Create HAS_COMPETENCY relationships
+CREATE (f4d)-[:HAS_COMPETENCY]->(c4d1)
 
-CREATE
-  (f4d)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "Kinetic_Threat_Assessment",
-        training_hours: 75,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4d2)
+CREATE (f4d)-[:HAS_COMPETENCY]->(c4d2)
 
-CREATE
-  (f4d)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "Cyber_Threat_Assessment",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4d3)
+CREATE (f4d)-[:HAS_COMPETENCY]->(c4d3)
 
-CREATE
-  (f4d)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Advanced",
-        assessment_method: "EMSO_Threat_Assessment",
-        training_hours: 85,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4d4)
+CREATE (f4d)-[:HAS_COMPETENCY]->(c4d4)
 
-CREATE
-  (f4d)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "CBRN_Threat_Assessment",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4d5)
+CREATE (f4d)-[:HAS_COMPETENCY]->(c4d5)
 
-CREATE
-  (f4d)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Expert",
-        assessment_method: "Lethality_Kill_Chain_Analysis",
-        training_hours: 95,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c4d6)
-
-//  Framework 5
+CREATE (f4d)-[:HAS_COMPETENCY]->(c4d6)
 
 // Create Framework #5
 CREATE
@@ -2395,7 +1437,7 @@ CREATE
 
 // Create Competency 5.1 - Mission Context
 CREATE
-  (c51:Competency:DOTE_KSAT
+  (c51:Competency:DoteKsat
     {
       id: "comp_5_1",
       name: "Mission Context",
@@ -2405,8 +1447,6 @@ CREATE
         "Builds mission understanding to scope operational testing and align with deployment strategy",
       competency_framework: "Software",
       resource_association: "Mission_Analysis_Tools",
-      reference_code: "5.1",
-      competency_level: "Intermediate",
       type_label: "Mission Context",
       type_uri: "http://competency.dod.mil/software_mission_context",
       PROFILE: "KSAT",
@@ -2415,7 +1455,7 @@ CREATE
 
 // Create Competency 5.2 - Software Development
 CREATE
-  (c52:Competency:DOTE_KSAT
+  (c52:Competency:DoteKsat
     {
       id: "comp_5_2",
       name: "Software Development",
@@ -2425,8 +1465,6 @@ CREATE
         "Understands agile/DevSecOps methodologies and development testing limitations",
       competency_framework: "Software",
       resource_association: "DevSecOps_Tools",
-      reference_code: "5.2",
-      competency_level: "Advanced",
       type_label: "Software Development",
       type_uri: "http://competency.dod.mil/software_development",
       PROFILE: "KSAT",
@@ -2435,7 +1473,7 @@ CREATE
 
 // Create Competency 5.3 - Risk Based Approach
 CREATE
-  (c53:Competency:DOTE_KSAT
+  (c53:Competency:DoteKsat
     {
       id: "comp_5_3",
       name: "Risk Based Approach",
@@ -2445,8 +1483,6 @@ CREATE
         "Applies risk-based approach to T&E scoping and advocates for independent testing",
       competency_framework: "Software",
       resource_association: "Risk_Assessment_Framework",
-      reference_code: "5.3",
-      competency_level: "Advanced",
       type_label: "Risk Based Approach",
       type_uri: "http://competency.dod.mil/software_risk_approach",
       PROFILE: "KSAT",
@@ -2455,7 +1491,7 @@ CREATE
 
 // Create Competency 5.4 - OT&E and LFT&E of Software
 CREATE
-  (c54:Competency:DOTE_KSAT
+  (c54:Competency:DoteKsat
     {
       id: "comp_5_4",
       name: "OT&E and LFT&E of Software",
@@ -2465,8 +1501,6 @@ CREATE
         "Develops operational testing strategy balancing T&E with software deployment rate",
       competency_framework: "Software",
       resource_association: "Software_T&E_Strategy_Tools",
-      reference_code: "5.4",
-      competency_level: "Expert",
       type_label: "OT&E and LFT&E of Software",
       type_uri: "http://competency.dod.mil/software_ote_lfte",
       PROFILE: "KSAT",
@@ -2475,7 +1509,7 @@ CREATE
 
 // Create Competency 5.5 - Test Automation
 CREATE
-  (c55:Competency:DOTE_KSAT
+  (c55:Competency:DoteKsat
     {
       id: "comp_5_5",
       name: "Test Automation",
@@ -2485,8 +1519,6 @@ CREATE
         "Understands test automation use cases and automated test data design",
       competency_framework: "Software",
       resource_association: "Test_Automation_Tools",
-      reference_code: "5.5",
-      competency_level: "Advanced",
       type_label: "Test Automation",
       type_uri: "http://competency.dod.mil/test_automation",
       PROFILE: "KSAT",
@@ -2495,7 +1527,7 @@ CREATE
 
 // Create Competency 5.6 - Support to Decisions
 CREATE
-  (c56:Competency:DOTE_KSAT
+  (c56:Competency:DoteKsat
     {
       id: "comp_5_6",
       name: "Support to Decisions",
@@ -2505,8 +1537,6 @@ CREATE
         "Understands T&E cadence with software development and acquisition decision points",
       competency_framework: "Software",
       resource_association: "Decision_Support_Tools",
-      reference_code: "5.6",
-      competency_level: "Advanced",
       type_label: "Support to Decisions",
       type_uri: "http://competency.dod.mil/software_decision_support",
       PROFILE: "KSAT",
@@ -2515,7 +1545,7 @@ CREATE
 
 // Create Competency 5.7 - Infrastructure
 CREATE
-  (c57:Competency:DOTE_KSAT
+  (c57:Competency:DoteKsat
     {
       id: "comp_5_7",
       name: "Infrastructure",
@@ -2525,107 +1555,26 @@ CREATE
         "Understands infrastructure impacts on performance and supports VV&A activities",
       competency_framework: "Software",
       resource_association: "Infrastructure_Analysis_Tools",
-      reference_code: "5.7",
-      competency_level: "Advanced",
       type_label: "Infrastructure",
       type_uri: "http://competency.dod.mil/software_infrastructure",
       PROFILE: "KSAT",
       ksat_type: "Skill"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Intermediate",
-        assessment_method: "Mission_Analysis_Exercise",
-        training_hours: 40,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c51)
+// Create HAS_COMPETENCY relationships
+CREATE (f5)-[:HAS_COMPETENCY]->(c51)
 
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "DevSecOps_Knowledge_Assessment",
-        training_hours: 60,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c52)
+CREATE (f5)-[:HAS_COMPETENCY]->(c52)
 
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "Risk_Assessment_Application",
-        training_hours: 55,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c53)
+CREATE (f5)-[:HAS_COMPETENCY]->(c53)
 
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Expert",
-        assessment_method: "Software_T&E_Strategy_Development",
-        training_hours: 90,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c54)
+CREATE (f5)-[:HAS_COMPETENCY]->(c54)
 
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "Test_Automation_Implementation",
-        training_hours: 65,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c55)
+CREATE (f5)-[:HAS_COMPETENCY]->(c55)
 
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Advanced",
-        assessment_method: "Decision_Support_Framework",
-        training_hours: 50,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c56)
+CREATE (f5)-[:HAS_COMPETENCY]->(c56)
 
-CREATE
-  (f5)-
-    [:HAS_COMPETENCY {
-        competency_order: 7,
-        proficiency_level: "Advanced",
-        assessment_method: "Infrastructure_Analysis",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c57)
-
-//  Framework 6
+CREATE (f5)-[:HAS_COMPETENCY]->(c57)
 
 // Create Framework #6
 CREATE
@@ -2645,7 +1594,7 @@ CREATE
 
 // Create Competency 6.1 - AI Awareness
 CREATE
-  (c61:Competency:DOTE_KSAT
+  (c61:Competency:DoteKsat
     {
       id: "comp_6_1",
       name: "AI Awareness",
@@ -2655,8 +1604,6 @@ CREATE
         "Understands AI challenges in T&E and potential for T&E improvements",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_T&E_Awareness_Tools",
-      reference_code: "6.1",
-      competency_level: "Intermediate",
       type_label: "AI Awareness",
       type_uri: "http://competency.dod.mil/ai_awareness",
       PROFILE: "KSAT",
@@ -2665,7 +1612,7 @@ CREATE
 
 // Create Competency 6.2 - AI T&E Policy and Ethics
 CREATE
-  (c62:Competency:DOTE_KSAT
+  (c62:Competency:DoteKsat
     {
       id: "comp_6_2",
       name: "AI T&E Policy and Ethics",
@@ -2675,8 +1622,6 @@ CREATE
         "Understands AI T&E policy, law, and ethical principles measurement",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Ethics_Framework",
-      reference_code: "6.2",
-      competency_level: "Advanced",
       type_label: "AI T&E Policy and Ethics",
       type_uri: "http://competency.dod.mil/ai_policy_ethics",
       PROFILE: "KSAT",
@@ -2685,7 +1630,7 @@ CREATE
 
 // Create Competency 6.3 - Dataset Relevancy
 CREATE
-  (c63:Competency:DOTE_KSAT
+  (c63:Competency:DoteKsat
     {
       id: "comp_6_3",
       name: "Dataset Relevancy",
@@ -2695,8 +1640,6 @@ CREATE
         "Distinguishes dataset types and ensures operational representativeness for AI testing",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Dataset_Analysis_Tools",
-      reference_code: "6.3",
-      competency_level: "Advanced",
       type_label: "Dataset Relevancy",
       type_uri: "http://competency.dod.mil/ai_dataset_relevancy",
       PROFILE: "KSAT",
@@ -2705,7 +1648,7 @@ CREATE
 
 // Create Competency 6.4 - AI Planning
 CREATE
-  (c64:Competency:DOTE_KSAT
+  (c64:Competency:DoteKsat
     {
       id: "comp_6_4",
       name: "AI Planning",
@@ -2715,8 +1658,6 @@ CREATE
         "Understands AI planning requirements and demonstrates hypothesis testing capabilities",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Planning_Tools",
-      reference_code: "6.4",
-      competency_level: "Advanced",
       type_label: "AI Planning",
       type_uri: "http://competency.dod.mil/ai_planning",
       PROFILE: "KSAT",
@@ -2725,7 +1666,7 @@ CREATE
 
 // Create Competency 6.5 - AI Performance
 CREATE
-  (c65:Competency:DOTE_KSAT
+  (c65:Competency:DoteKsat
     {
       id: "comp_6_5",
       name: "AI Performance",
@@ -2735,8 +1676,6 @@ CREATE
         "Confirms AI system information accuracy, precision, recallability, and robustness",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Performance_Assessment_Tools",
-      reference_code: "6.5",
-      competency_level: "Advanced",
       type_label: "AI Performance",
       type_uri: "http://competency.dod.mil/ai_performance",
       PROFILE: "KSAT",
@@ -2745,7 +1684,7 @@ CREATE
 
 // Create Competency 6.6 - Human-Machine Teaming
 CREATE
-  (c66:Competency:DOTE_KSAT
+  (c66:Competency:DoteKsat
     {
       id: "comp_6_6",
       name: "Human-Machine Teaming",
@@ -2755,8 +1694,6 @@ CREATE
         "Understands human-machine science and evaluation strategy within TEMP",
       competency_framework: "Artificial Intelligence",
       resource_association: "Human_Machine_Teaming_Tools",
-      reference_code: "6.6",
-      competency_level: "Advanced",
       type_label: "Human-Machine Teaming",
       type_uri: "http://competency.dod.mil/human_machine_teaming",
       PROFILE: "KSAT",
@@ -2765,7 +1702,7 @@ CREATE
 
 // Create Competency 6.7 - AI Application
 CREATE
-  (c67:Competency:DOTE_KSAT
+  (c67:Competency:DoteKsat
     {
       id: "comp_6_7",
       name: "AI Application",
@@ -2775,8 +1712,6 @@ CREATE
         "Applies AI tools, DevSecOps, and ML models while communicating best practices",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Application_Framework",
-      reference_code: "6.7",
-      competency_level: "Expert",
       type_label: "AI Application",
       type_uri: "http://competency.dod.mil/ai_application",
       PROFILE: "KSAT",
@@ -2785,7 +1720,7 @@ CREATE
 
 // Create Competency 6.8 - AI Visualization
 CREATE
-  (c68:Competency:DOTE_KSAT
+  (c68:Competency:DoteKsat
     {
       id: "comp_6_8",
       name: "AI Visualization",
@@ -2795,8 +1730,6 @@ CREATE
         "Evaluates AI data visualizations and ML model performance for stakeholder communication",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Visualization_Tools",
-      reference_code: "6.8",
-      competency_level: "Advanced",
       type_label: "AI Visualization",
       type_uri: "http://competency.dod.mil/ai_visualization",
       PROFILE: "KSAT",
@@ -2805,7 +1738,7 @@ CREATE
 
 // Create Competency 6.9 - AI Capabilities Assessment
 CREATE
-  (c69:Competency:DOTE_KSAT
+  (c69:Competency:DoteKsat
     {
       id: "comp_6_9",
       name: "AI Capabilities Assessment",
@@ -2815,133 +1748,30 @@ CREATE
         "Understands AI tools, identifies ML model issues, and leverages AI for T&E integration",
       competency_framework: "Artificial Intelligence",
       resource_association: "AI_Capabilities_Assessment_Tools",
-      reference_code: "6.9",
-      competency_level: "Expert",
       type_label: "AI Capabilities Assessment",
       type_uri: "http://competency.dod.mil/ai_capabilities_assessment",
       PROFILE: "KSAT",
       ksat_type: "Ability"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Intermediate",
-        assessment_method: "AI_Awareness_Assessment",
-        training_hours: 35,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c61)
+// Create HAS_COMPETENCY relationships
+CREATE (f6)-[:HAS_COMPETENCY]->(c61)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Advanced",
-        assessment_method: "AI_Ethics_Policy_Review",
-        training_hours: 50,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c62)
+CREATE (f6)-[:HAS_COMPETENCY]->(c62)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "Dataset_Analysis_Exercise",
-        training_hours: 60,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c63)
+CREATE (f6)-[:HAS_COMPETENCY]->(c63)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Advanced",
-        assessment_method: "AI_Planning_Portfolio",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c64)
+CREATE (f6)-[:HAS_COMPETENCY]->(c64)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Advanced",
-        assessment_method: "AI_Performance_Evaluation",
-        training_hours: 65,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c65)
+CREATE (f6)-[:HAS_COMPETENCY]->(c65)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Advanced",
-        assessment_method: "Human_Machine_Assessment",
-        training_hours: 55,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c66)
+CREATE (f6)-[:HAS_COMPETENCY]->(c66)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 7,
-        proficiency_level: "Expert",
-        assessment_method: "AI_Application_Demonstration",
-        training_hours: 100,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c67)
+CREATE (f6)-[:HAS_COMPETENCY]->(c67)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 8,
-        proficiency_level: "Advanced",
-        assessment_method: "AI_Visualization_Project",
-        training_hours: 45,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c68)
+CREATE (f6)-[:HAS_COMPETENCY]->(c68)
 
-CREATE
-  (f6)-
-    [:HAS_COMPETENCY {
-        competency_order: 9,
-        proficiency_level: "Expert",
-        assessment_method: "AI_Capabilities_Analysis",
-        training_hours: 90,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c69)
-
-//  Framework 7
+CREATE (f6)-[:HAS_COMPETENCY]->(c69)
 
 // Create Framework #7
 CREATE
@@ -2961,7 +1791,7 @@ CREATE
 
 // Create Competency 7.1 - Professional Ethics
 CREATE
-  (c71:Competency:DOTE_KSAT
+  (c71:Competency:DoteKsat
     {
       id: "comp_7_1",
       name: "Professional Ethics",
@@ -2971,8 +1801,6 @@ CREATE
         "Understands DOT&E ethical standards and provides clear direction to T&E organizations",
       competency_framework: "Leadership",
       resource_association: "Ethics_Guidelines_Framework",
-      reference_code: "7.1",
-      competency_level: "Advanced",
       type_label: "Professional Ethics",
       type_uri: "http://competency.dod.mil/professional_ethics",
       PROFILE: "KSAT",
@@ -2981,7 +1809,7 @@ CREATE
 
 // Create Competency 7.2 - Collaboration and Partnerships
 CREATE
-  (c72:Competency:DOTE_KSAT
+  (c72:Competency:DoteKsat
     {
       id: "comp_7_2",
       name: "Collaboration and Partnerships",
@@ -2991,8 +1819,6 @@ CREATE
         "Inspires collaboration and partnership while motivating teams to accomplish goals",
       competency_framework: "Leadership",
       resource_association: "Collaboration_Tools",
-      reference_code: "7.2",
-      competency_level: "Expert",
       type_label: "Collaboration and Partnerships",
       type_uri: "http://competency.dod.mil/collaboration_partnerships",
       PROFILE: "KSAT",
@@ -3001,7 +1827,7 @@ CREATE
 
 // Create Competency 7.3 - Conflict Resolution
 CREATE
-  (c73:Competency:DOTE_KSAT
+  (c73:Competency:DoteKsat
     {
       id: "comp_7_3",
       name: "Conflict Resolution",
@@ -3011,8 +1837,6 @@ CREATE
         "Engages leadership to resolve test planning concerns and creates resolution channels",
       competency_framework: "Leadership",
       resource_association: "Conflict_Resolution_Framework",
-      reference_code: "7.3",
-      competency_level: "Advanced",
       type_label: "Conflict Resolution",
       type_uri: "http://competency.dod.mil/conflict_resolution",
       PROFILE: "KSAT",
@@ -3021,7 +1845,7 @@ CREATE
 
 // Create Competency 7.4 - Creativity and Innovation
 CREATE
-  (c74:Competency:DOTE_KSAT
+  (c74:Competency:DoteKsat
     {
       id: "comp_7_4",
       name: "Creativity and Innovation",
@@ -3031,8 +1855,6 @@ CREATE
         "Develops new insights, questions conventional approaches, and implements innovative programs",
       competency_framework: "Leadership",
       resource_association: "Innovation_Framework",
-      reference_code: "7.4",
-      competency_level: "Expert",
       type_label: "Creativity and Innovation",
       type_uri: "http://competency.dod.mil/creativity_innovation",
       PROFILE: "KSAT",
@@ -3041,7 +1863,7 @@ CREATE
 
 // Create Competency 7.5 - Strategic Thinking and Planning
 CREATE
-  (c75:Competency:DOTE_KSAT
+  (c75:Competency:DoteKsat
     {
       id: "comp_7_5",
       name: "Strategic Thinking and Planning",
@@ -3051,8 +1873,6 @@ CREATE
         "Formulates strategic objectives and implements long-term organizational plans",
       competency_framework: "Leadership",
       resource_association: "Strategic_Planning_Tools",
-      reference_code: "7.5",
-      competency_level: "Expert",
       type_label: "Strategic Thinking and Planning",
       type_uri: "http://competency.dod.mil/strategic_thinking_planning",
       PROFILE: "KSAT",
@@ -3061,7 +1881,7 @@ CREATE
 
 // Create Competency 7.6 - Workforce Development
 CREATE
-  (c76:Competency:DOTE_KSAT
+  (c76:Competency:DoteKsat
     {
       id: "comp_7_6",
       name: "Workforce Development",
@@ -3071,8 +1891,6 @@ CREATE
         "Designs and implements education programs to address workforce competency gaps",
       competency_framework: "Leadership",
       resource_association: "Workforce_Development_Systems",
-      reference_code: "7.6",
-      competency_level: "Advanced",
       type_label: "Workforce Development",
       type_uri: "http://competency.dod.mil/workforce_development",
       PROFILE: "KSAT",
@@ -3081,7 +1899,7 @@ CREATE
 
 // Create Competency 7.7 - Financial Management
 CREATE
-  (c77:Competency:DOTE_KSAT
+  (c77:Competency:DoteKsat
     {
       id: "comp_7_7",
       name: "Financial Management",
@@ -3091,102 +1909,23 @@ CREATE
         "Manages organizational finances, budgets, and procurement with cost-benefit analysis",
       competency_framework: "Leadership",
       resource_association: "Financial_Management_Systems",
-      reference_code: "7.7",
-      competency_level: "Advanced",
       type_label: "Financial Management",
       type_uri: "http://competency.dod.mil/financial_management",
       PROFILE: "KSAT",
       ksat_type: "Skill"
     })
 
-// Create HAS_COMPETENCY relationships with edge properties
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 1,
-        proficiency_level: "Advanced",
-        assessment_method: "Ethics_Case_Study",
-        training_hours: 40,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c71)
+// Create HAS_COMPETENCY relationships
+CREATE (f7)-[:HAS_COMPETENCY]->(c71)
 
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 2,
-        proficiency_level: "Expert",
-        assessment_method: "Team_Leadership_Assessment",
-        training_hours: 80,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c72)
+CREATE (f7)-[:HAS_COMPETENCY]->(c72)
 
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 3,
-        proficiency_level: "Advanced",
-        assessment_method: "Conflict_Resolution_Simulation",
-        training_hours: 55,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c73)
+CREATE (f7)-[:HAS_COMPETENCY]->(c73)
 
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 4,
-        proficiency_level: "Expert",
-        assessment_method: "Innovation_Portfolio",
-        training_hours: 70,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c74)
+CREATE (f7)-[:HAS_COMPETENCY]->(c74)
 
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 5,
-        proficiency_level: "Expert",
-        assessment_method: "Strategic_Planning_Exercise",
-        training_hours: 90,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c75)
+CREATE (f7)-[:HAS_COMPETENCY]->(c75)
 
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 6,
-        proficiency_level: "Advanced",
-        assessment_method: "Training_Program_Development",
-        training_hours: 65,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c76)
+CREATE (f7)-[:HAS_COMPETENCY]->(c76)
 
-CREATE
-  (f7)-
-    [:HAS_COMPETENCY {
-        competency_order: 7,
-        proficiency_level: "Advanced",
-        assessment_method: "Budget_Management_Exercise",
-        training_hours: 75,
-        certification_required: true,
-        last_updated: datetime("2024-09-01T00:00:00Z"),
-        version: "1.0"
-      }]->
-  (c77)
+CREATE (f7)-[:HAS_COMPETENCY]->(c77)
