@@ -1,0 +1,97 @@
+{
+    "mappings": {
+        "Framework": [
+            "DCWFFramework",
+            "FunctionalCommunity",
+            "WorkForceElement"
+        ],
+        "Competency": [
+            "Job",
+            "AdvancedWorkRole",
+            "BasicWorkRole",
+            "IntermediateWorkRole",
+            "KsatsAbility",
+            "KsatsKnowledge",
+            "KsatsSkill",
+            "KsatsTask",
+            "DCWFCompetency"
+        ]
+    },
+    "specific_type_mappings": {
+        "DCWFFramework": {
+            "specific_label": "DCWFFramework",
+            "superset_label": "Framework",
+            "schema_file": "dcwf_framework_node_profile.json"
+        },
+        "DCWFFramework": {
+            "specific_label": "DCWFFramework",
+            "superset_label": "Framework",
+            "schema_file": "dcwf_framework_node_profile.json"
+        },
+        "FunctionalCommunity": {
+            "specific_label": "FunctionalCommunity",
+            "superset_label": "Framework",
+            "schema_file": "functional_community_node_profile.json"
+        },
+        "WorkForceElement": {
+            "specific_label": "WorkForceElement",
+            "superset_label": "Framework",
+            "schema_file": "workforce_element_node_profile.json"
+        },
+        "Job": {
+            "specific_label": "Job",
+            "superset_label": "Competency",
+            "schema_file": "job_node_profile.json"
+        },
+        "AdvancedWorkRole": {
+            "specific_label": "AdvancedWorkRole",
+            "superset_label": "Competency",
+            "schema_file": "advanced_work_role_node_profile.json"
+        },
+        "BasicWorkRole": {
+            "specific_label": "BasicWorkRole",
+            "superset_label": "Competency",
+            "schema_file": "basic_work_role_node_profile.json"
+        },
+        "IntermediateWorkRole": {
+            "specific_label": "IntermediateWorkRole",
+            "superset_label": "Competency",
+            "schema_file": "intermediate_work_role_node_profile.json"
+        },
+        "KsatsAbility": {
+            "specific_label": "KsatsAbility",
+            "superset_label": "Competency",
+            "schema_file": "ksats_ability_node_profile.json"
+        },
+        "KsatsKnowledge": {
+            "specific_label": "KsatsKnowledge",
+            "superset_label": "Competency",
+            "schema_file": "ksats_knowledge_node_profile.json"
+        },
+        "KsatsSkill": {
+            "specific_label": "KsatsSkill",
+            "superset_label": "Competency",
+            "schema_file": "ksats_skill_node_profile.json"
+        },
+        "KsatsTask": {
+            "specific_label": "KsatsTask",
+            "superset_label": "Competency",
+            "schema_file": "ksats_task_node_profile.json"
+        },
+        "DCWFCompetency": {
+            "specific_label": "DCWFCompetency",
+            "superset_label": "Competency",
+            "schema_file": "dcwf_competency_node_profile.json"
+        },
+        "Competency": {
+            "specific_label": "Competency",
+            "superset_label": "Competency",
+            "schema_file": "competency_node_profile.json"
+        },
+        "Framework": {
+            "specific_label": "Framework",
+            "superset_label": "Framework",
+            "schema_file": "framework_node_profile.json"
+        }
+    }
+}

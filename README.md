@@ -40,6 +40,8 @@ graph TD;
         CES-.->CDS;
 ```
 
+**Note:** Include a .env file to configure environment variables for local development (e.g., `NEO4J_BOLT_URI`, `NEO4J_USER`, `NEO4J_PASSWORD`). This will also automatically be exported to docker container.
+
 ## ECCR Data Diagram
 
 ### DOT&E Domain Diagram
@@ -126,6 +128,8 @@ docker-compose logs -f
 make up              # Start all services
 make down            # Stop all services
 make build           # Rebuild and start
+make test            # Run all tests
+make clean           # Clean up Docker resources
 make restart         # Restart services
 make logs            # View all logs
 make logs-api        # View API logs only
@@ -467,7 +471,7 @@ The system uses specific relationship types:
 
 The API supports the following node types with JSON schema validation:
 
-- `DcwfFramework`
+- `DCWFFramework`
 - `Job`
 - `AdvancedWorkRole`
 - `BasicWorkRole`
@@ -476,7 +480,7 @@ The API supports the following node types with JSON schema validation:
 - `KsatsKnowledge`
 - `KsatsSkill`
 - `KsatsTask`
-- `DcwfCompetency`
+- `DCWFCompetency`
 - `Competency`
 - `Framework`
 - `FunctionalCommunity`
@@ -594,6 +598,94 @@ python manage.py test eccr.tests -v 2
 ✅ **Error Handling**: Comprehensive error responses for validation failures  
 ✅ **Edge Case Handling**: Invalid labels, missing fields, malformed payloads  
 ✅ **Data Integrity**: Ensures only valid data reaches the Neo4j database
+
+## Label Mapping Implementation
+
+This implementation supports the two-label pattern as seen in the `init.cypher` file. When a single label is submitted in a REST payload, it automatically maps to the hierarchical two-label pattern where the second label is a superset of the first.
+
+### Examples
+
+#### Framework Hierarchy
+
+- `DCWFFramework` → `DCWFFramework:Framework`
+- `FunctionalCommunity` → `FunctionalCommunity:Framework`
+- `WorkForceElement` → `WorkForceElement:Framework`
+
+#### Competency Hierarchy
+
+- `Job` → `Job:Competency`
+- `AdvancedWorkRole` → `AdvancedWorkRole:Competency`
+- `KsatsTask` → `KsatsTask:Competency`
+- `DCWFCompetency` → `DCWFCompetency:Competency`
+
+### REST API Usage
+
+#### Sample Request Payload
+
+```json
+{
+  "operation": "create_nodes",
+  "nodes": [
+    {
+      "label": "DCWFFramework",
+      "properties": {
+        "id": "DCWFF-001",
+        "name": "DoD Cyber Workforce Framework",
+        "description": "Department of Defense's standardized system...",
+        "authoritativeSource": "https://public.cyber.mil/dcwf-framework"
+      }
+    },
+    {
+      "label": "FunctionalCommunity",
+      "properties": {
+        "id": "DCWF-FC1",
+        "name": "Cyberspace IT Workforce",
+        "description": "Personnel who design, build, configure..."
+      }
+    },
+    {
+      "label": "Job",
+      "properties": {
+        "id": "WR-AN-EX-001",
+        "name": "Exploitation Analyst",
+        "description": "Partners with cyberspace operations customers..."
+      }
+    }
+  ]
+}
+```
+
+#### Generated Cypher Statements
+
+```cypher
+CREATE (n1:DCWFFramework:Framework {
+  id: "DCWFF-001",
+  name: "DoD Cyber Workforce Framework",
+  description: "Department of Defense's standardized system...",
+  authoritativeSource: "https://public.cyber.mil/dcwf-framework"
+})
+
+CREATE (n2:FunctionalCommunity:Framework {
+  id: "DCWF-FC1",
+  name: "Cyberspace IT Workforce",
+  description: "Personnel who design, build, configure..."
+})
+
+CREATE (n3:Job:Competency {
+  id: "WR-AN-EX-001",
+  name: "Exploitation Analyst",
+  description: "Partners with cyberspace operations customers..."
+})
+```
+
+### Hierarchical Relationship
+
+The implementation follows the principle that:
+
+- A `FunctionalCommunity` **is a** `Framework` (but not vice versa)
+- A `Job` **is a** `Competency` (but not vice versa)
+- The specific label represents the most precise type
+- The superset label represents the broader category
 
 ## Demo Script
 

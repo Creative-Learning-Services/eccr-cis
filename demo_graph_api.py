@@ -57,7 +57,7 @@ def demo_create_nodes():
         "description": "Demo: Create sample framework and competency nodes",
         "nodes": [
             {
-                "label": "DcwfFramework",
+                "label": "DCWFFramework",
                 "properties": {
                     "id": "DCWFF-DEMO-001",
                     "name": "Demo DoD Cyber Workforce Framework",
@@ -65,11 +65,11 @@ def demo_create_nodes():
                     "authoritativeSource": "https://demo.cyber.mil/dcwf-framework",
                     "domain": "DCWF",
                     "conformsTo": "SCD 1.0",
-                    "profile": ["Framework", "DcwfFramework"],
+                    "profile": ["Framework", "DCWFFramework"],
                 },
             },
             {
-                "label": "DcwfCompetency",
+                "label": "DCWFCompetency",
                 "properties": {
                     "id": "DCWF-COMP-DEMO-001",
                     "name": "Demo Incident Response",
@@ -77,7 +77,7 @@ def demo_create_nodes():
                     "competencyStatement": "Can lead incident response teams effectively",
                     "competencyLevel": "Expert",
                     "conformsTo": "SCD 1.0",
-                    "profile": ["DcwfCompetency", "Competency"],
+                    "profile": ["DCWFCompetency", "Competency"],
                 },
             },
         ],

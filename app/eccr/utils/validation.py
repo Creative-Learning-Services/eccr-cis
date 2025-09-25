@@ -3,6 +3,7 @@ import os
 from typing import Dict, Any, List, Optional
 from jsonschema import validate, ValidationError, RefResolver
 from django.conf import settings
+from eccr.utils.label_mapping import label_mapping_manager
 
 
 class SchemaValidationError(Exception):
@@ -39,11 +40,13 @@ class NodeSchemaValidator:
             base_uri=f"file://{self.schemas_dir}/", referrer={}
         )
 
+    # This function does single label mapping: Not being used at the moment
     def get_schema_for_label(self, label: str) -> Optional[Dict[str, Any]]:
         """Get schema for a given node label"""
         # Map node labels to schema files
         label_to_schema = {
-            "DcwfFramework": "dcwf_framework_node_profile.json",
+            "DCWFFramework": "dcwf_framework_node_profile.json",
+            "DCWFFramework": "dcwf_framework_node_profile.json",  # Support both cases
             "Job": "job_node_profile.json",
             "AdvancedWorkRole": "advanced_work_role_node_profile.json",
             "BasicWorkRole": "basic_work_role_node_profile.json",
@@ -52,7 +55,7 @@ class NodeSchemaValidator:
             "KsatsKnowledge": "ksats_knowledge_node_profile.json",
             "KsatsSkill": "ksats_skill_node_profile.json",
             "KsatsTask": "ksats_task_node_profile.json",
-            "DcwfCompetency": "dcwf_competency_node_profile.json",
+            "DCWFCompetency": "dcwf_competency_node_profile.json",
             "Competency": "competency_node_profile.json",
             "Framework": "framework_node_profile.json",
             "FunctionalCommunity": "functional_community_node_profile.json",
@@ -60,6 +63,17 @@ class NodeSchemaValidator:
         }
 
         schema_file = label_to_schema.get(label)
+        if schema_file and schema_file in self._schema_cache:
+            return self._schema_cache[schema_file]
+        return None
+
+    def get_schema_for_single_label(
+        self, single_label: str
+    ) -> Optional[Dict[str, Any]]:
+        """Get schema for a given single label using label mapping"""
+        schema_file = label_mapping_manager.get_schema_file_for_single_label(
+            single_label
+        )
         if schema_file and schema_file in self._schema_cache:
             return self._schema_cache[schema_file]
         return None
@@ -78,10 +92,11 @@ class NodeSchemaValidator:
             raise SchemaValidationError("Node data must contain 'label' field")
 
         label = node_data["label"]
-        schema = self.get_schema_for_label(label)
+
+        schema = self.get_schema_for_single_label(label)
 
         if not schema:
-            raise SchemaValidationError(f"No schema found for node label: {label}")
+            raise SchemaValidationError(f"No schema found for label: {label}")
 
         try:
             validate(instance=node_data, schema=schema, resolver=self._resolver)

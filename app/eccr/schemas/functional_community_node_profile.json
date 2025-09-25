@@ -6,6 +6,16 @@
         "label": {
             "const": "FunctionalCommunity"
         },
+        "expected_labels": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "const": [
+                "FunctionalCommunity",
+                "Framework"
+            ]
+        },
         "properties": {
             "type": "object",
             "properties": {

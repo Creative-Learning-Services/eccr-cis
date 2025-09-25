@@ -58,7 +58,7 @@ class CreateNodesView(BaseGraphView):
                     "operation": "create_nodes",
                     "nodes": [
                         {
-                            "label": "DcwfFramework",
+                            "label": "DCWFFramework",
                             "properties": {
                                 "id": "DCWFF-001",
                                 "name": "Cyber Defense Framework",
@@ -67,7 +67,7 @@ class CreateNodesView(BaseGraphView):
                             },
                         },
                         {
-                            "label": "DcwfFramework",
+                            "label": "DCWFFramework",
                             "properties": {
                                 "id": "DCWFF-002",
                                 "name": "Incident Response Framework",
@@ -93,11 +93,11 @@ class CreateNodesView(BaseGraphView):
                                 "nodes_created": 2,
                                 "nodes": [
                                     {
-                                        "label": "DcwfFramework",
+                                        "label": "DCWFFramework",
                                         "properties": {"id": "DCWFF-001"},
                                     },
                                     {
-                                        "label": "DcwfFramework",
+                                        "label": "DCWFFramework",
                                         "properties": {"id": "DCWFF-002"},
                                     },
                                 ],

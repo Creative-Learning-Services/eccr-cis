@@ -21,7 +21,7 @@ class PayloadValidatorTests(TestCase):
             "description": "Test creation",
             "nodes": [
                 {
-                    "label": "DcwfFramework",
+                    "label": "DCWFFramework",
                     "properties": {"id": "DCWFF-001", "name": "Test Framework"},
                 }
             ],
@@ -141,7 +141,7 @@ class GraphOperationsAPITests(TestCase):
             "description": "Create test nodes",
             "nodes": [
                 {
-                    "label": "DcwfFramework",
+                    "label": "DCWFFramework",
                     "properties": {"id": "DCWFF-002", "name": "Test Framework"},
                 }
             ],

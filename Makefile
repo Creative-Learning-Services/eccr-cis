@@ -47,7 +47,7 @@ up:
 
 down:
 	@echo "🛑 Stopping ECCR services..."
-	docker-compose down
+	docker-compose down -v
 
 build:
 	@echo "🔨 Building and starting services..."

@@ -29,17 +29,17 @@ class RepositoryTests(TestCase):
             session.execute_write(
                 lambda tx, tag: tx.run(
                     """
-                    CREATE (f:Framework {uid:$f_uid,name:$f_name,description:'Test Framework', authoritative_source:'Source', resource_association:[], association:'', PROFILE:[]})
+                    CREATE (f:Framework {id:$f_id,name:$f_name,description:'Test Framework', authoritative_source:'Source', resource_association:[], association:'', PROFILE:[]})
                     WITH f
-                    CREATE (c:Competency {uid:$c_uid,name:$c_name,description:'Desc',competency_statement:[],competency_framework:[],resource_association:[],reference_code:'R',competency_level:'L',type_label:'TL',type_uri:'URI',ksat_type:'',PROFILE:[],domain:'Test'})
-                    CREATE (f)-[:HAS_COMPETENCY]->(c)
-                    CREATE (w:WorkRole {uid:$w_uid,name:$w_name,description:'WR',NISTID:'N',authoritativeSource:'AS',resourceAssociation:[],competencyDefinition:[],classification:'CL',markings:[],LocationName:'Loc',JobSalary:'100',JobTravelCode:'JTC',PromotionPotential:'P',careerpathway:[],type_uri:'uri',PROFILE:[],domain:'WR'})
+                    CREATE (c:Job:Competency {id:$c_id,name:$c_name,description:'Desc',competency_statement:[],competency_framework:[],resource_association:[],reference_code:'R',competency_level:'L',type_label:'TL',type_uri:'URI',ksat_type:'',PROFILE:[],domain:'Test'})
+                    CREATE (f)-[:HAS_SUBFRAMEWORK]->(c)
+                    CREATE (w:WorkRole:Competency:AdvancedWorkRole {id:$w_id,name:$w_name,description:'WR',NISTID:'N',authoritativeSource:'AS',resourceAssociation:[],competencyDefinition:[],classification:'CL',markings:[],LocationName:'Loc',JobSalary:'100',JobTravelCode:'JTC',PromotionPotential:'P',careerpathway:[],type_uri:'uri',PROFILE:[],domain:'WR'})
                     """,
-                    f_uid=f"fw-{cls.test_tag}",
+                    f_id=f"fw-{cls.test_tag}",
                     f_name=f"Framework {cls.test_tag}",
-                    c_uid=f"comp-{cls.test_tag}",
+                    c_id=f"comp-{cls.test_tag}",
                     c_name=f"Competency {cls.test_tag}",
-                    w_uid=f"wr-{cls.test_tag}",
+                    w_id=f"wr-{cls.test_tag}",
                     w_name=f"WorkRole {cls.test_tag}",
                 ),
                 cls.test_tag,
@@ -52,7 +52,7 @@ class RepositoryTests(TestCase):
             session.execute_write(
                 lambda tx, tag: tx.run(
                     """
-                    MATCH (n) WHERE n.uid IN [$f,$c,$w] DETACH DELETE n
+                    MATCH (n) WHERE n.id IN [$f,$c,$w] DETACH DELETE n
                     """,
                     f=f"fw-{cls.test_tag}",
                     c=f"comp-{cls.test_tag}",
@@ -70,23 +70,25 @@ class RepositoryTests(TestCase):
     def test_get_competency(self):
         comp = get_competency(f"comp-{self.test_tag}")
         assert comp is not None
-        assert comp["uid"] == f"comp-{self.test_tag}"
+        assert comp["id"] == f"comp-{self.test_tag}"
 
     def test_list_frameworks_and_competency_count(self):
         data = list_frameworks(limit=5, skip=0)
         assert "results" in data
         target = next(
-            (f for f in data["results"] if f["uid"] == f"fw-{self.test_tag}"), None
+            (f for f in data["results"] if f["id"] == f"fw-{self.test_tag}"), None
         )
         assert target is not None
-        assert target.get("competency_count") == 1
+        assert (
+            target.get("subframework_count") == 0
+        )  # No subframeworks in our test data
 
     def test_framework_with_competencies(self):
         fw = get_framework_with_competencies(f"fw-{self.test_tag}")
         assert fw is not None
-        assert fw["framework"]["uid"] == f"fw-{self.test_tag}"
-        assert fw["competencies"] and fw["competencies"][0]["uid"].startswith("comp-")
+        assert fw["framework"]["id"] == f"fw-{self.test_tag}"
+        assert fw["competencies"] and fw["competencies"][0]["id"].startswith("comp-")
 
     def test_list_workroles(self):
         data = list_workroles(limit=5, skip=0)
-        assert any(r["uid"] == f"wr-{self.test_tag}" for r in data["results"])
+        assert any(r["id"] == f"wr-{self.test_tag}" for r in data["results"])

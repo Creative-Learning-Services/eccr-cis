@@ -3,8 +3,20 @@
     "title": "Framework Node Profile",
     "type": "object",
     "properties": {
+        "node_type": {
+            "const": "Framework"
+        },
         "label": {
             "const": "Framework"
+        },
+        "labels": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "const": [
+                "Framework"
+            ]
         },
         "properties": {
             "type": "object",
@@ -43,7 +55,6 @@
         }
     },
     "required": [
-        "label",
         "properties"
     ],
     "additionalProperties": false

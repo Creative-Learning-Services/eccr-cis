@@ -1,10 +1,23 @@
 {
     "$schema": "https://json-schema.org/draft-07/schema#",
-    "title": "DcwfFramework Node Profile",
+    "title": "DCWFFramework Node Profile",
     "type": "object",
     "properties": {
+        "node_type": {
+            "const": "DCWFFramework"
+        },
         "label": {
-            "const": "DcwfFramework"
+            "const": "DCWFFramework"
+        },
+        "labels": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "const": [
+                "DCWFFramework",
+                "Framework"
+            ]
         },
         "properties": {
             "type": "object",
@@ -49,7 +62,6 @@
         }
     },
     "required": [
-        "label",
         "properties"
     ],
     "additionalProperties": false

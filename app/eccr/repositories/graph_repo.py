@@ -1,8 +1,29 @@
 from typing import Dict, Any, List, Optional, Tuple
 import logging
 from eccr.neo4j_driver import get_driver
+from eccr.utils.label_mapping import label_mapping_manager
 
 logger = logging.getLogger(__name__)
+
+
+def build_labels_string(node: Dict[str, Any]) -> str:
+    """
+    Build labels string for Cypher CREATE statement based on label mapping
+
+    Args:
+        node: Node dictionary with 'label' key
+
+    Returns:
+        String of labels for Cypher (e.g., ":DCWFFramework:Framework")
+    """
+    if "label" not in node:
+        return ""
+
+    single_label = node["label"]
+    labels = label_mapping_manager.get_labels_for_single_label(single_label)
+
+    # Build label string with colons
+    return ":" + ":".join(labels)
 
 
 def build_cypher_properties(properties: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
@@ -36,7 +57,7 @@ def create_nodes_batch(nodes: List[Dict[str, Any]]) -> Dict[str, Any]:
     Create multiple nodes in a batch operation
 
     Args:
-        nodes: List of node dictionaries with 'label' and 'properties'
+        nodes: List of node dictionaries with 'label'/'node_type' and 'properties'
 
     Returns:
         Dictionary with operation results
@@ -48,13 +69,14 @@ def create_nodes_batch(nodes: List[Dict[str, Any]]) -> Dict[str, Any]:
 
         # Create each node individually for better error handling
         for node in nodes:
-            label = node["label"]
+            # Build labels using the new label mapping system
+            labels_string = build_labels_string(node)
             properties = node["properties"]
 
             prop_string, params = build_cypher_properties(properties)
 
             cypher = f"""
-            CREATE (n:{label} {prop_string})
+            CREATE (n{labels_string} {prop_string})
             RETURN n
             """
 
@@ -63,12 +85,17 @@ def create_nodes_batch(nodes: List[Dict[str, Any]]) -> Dict[str, Any]:
 
             if record:
                 created_node = dict(record["n"])
-                created_nodes.append({"label": label, "properties": created_node})
+                # Include the node_type or label for tracking
+                node_identifier = node.get("node_type", node.get("label", "unknown"))
+                created_nodes.append(
+                    {"node_type": node_identifier, "properties": created_node}
+                )
                 logger.info(
-                    f"Created {label} node with id: {properties.get('id', 'unknown')}"
+                    f"Created {node_identifier} node with labels {labels_string} and id: {properties.get('id', 'unknown')}"
                 )
             else:
-                raise Exception(f"Failed to create {label} node")
+                node_identifier = node.get("node_type", node.get("label", "unknown"))
+                raise Exception(f"Failed to create {node_identifier} node")
 
     return {"nodes_created": len(created_nodes), "nodes": created_nodes}
 
@@ -92,10 +119,10 @@ def create_node_with_relationship(
     driver = get_driver()
 
     with driver.session() as session:
-        # Extract data
-        source_label = source_node["label"]
+        # Extract data using new label system
+        source_labels = build_labels_string(source_node)
         source_props = source_node["properties"]
-        dest_label = destination_node["label"]
+        dest_labels = build_labels_string(destination_node)
         dest_props = destination_node["properties"]
         edge_label = relationship["edge_label"]
         rel_props = relationship.get("properties", {})
@@ -121,8 +148,8 @@ def create_node_with_relationship(
 
         # Build Cypher query
         cypher = f"""
-        CREATE (source:{source_label} {source_prop_string})
-        CREATE (dest:{dest_label} {dest_prop_string})
+        CREATE (source{source_labels} {source_prop_string})
+        CREATE (dest{dest_labels} {dest_prop_string})
         CREATE (source)-[r:{edge_label} {rel_prop_string}]->(dest)
         RETURN source, dest, r
         """
@@ -135,13 +162,27 @@ def create_node_with_relationship(
             created_dest = dict(record["dest"])
             created_rel = dict(record["r"])
 
+            # Get node identifiers for logging and return values
+            source_identifier = source_node.get(
+                "node_type", source_node.get("label", "unknown")
+            )
+            dest_identifier = destination_node.get(
+                "node_type", destination_node.get("label", "unknown")
+            )
+
             logger.info(
-                f"Created nodes and relationship: {source_label} -[{edge_label}]-> {dest_label}"
+                f"Created nodes and relationship: {source_identifier} -[{edge_label}]-> {dest_identifier}"
             )
 
             return {
-                "source_node": {"label": source_label, "properties": created_source},
-                "destination_node": {"label": dest_label, "properties": created_dest},
+                "source_node": {
+                    "node_type": source_identifier,
+                    "properties": created_source,
+                },
+                "destination_node": {
+                    "node_type": dest_identifier,
+                    "properties": created_dest,
+                },
                 "relationship": {"type": edge_label, "properties": created_rel},
             }
         else:
@@ -204,10 +245,12 @@ def create_node_and_relate_to_existing(
     validation_config = validation_config or {}
 
     with driver.session() as session:
-        # Extract data
-        new_label = new_node["label"]
+        # Extract data using new label system
+        new_labels = build_labels_string(new_node)
         new_props = new_node["properties"]
-        existing_label = existing_node_ref["label"]
+        existing_label = existing_node_ref[
+            "label"
+        ]  # For lookup, still use single label
         lookup_method = existing_node_ref["lookup_method"]
         lookup_value = existing_node_ref["lookup_value"]
         edge_label = relationship["edge_label"]
@@ -249,7 +292,7 @@ def create_node_and_relate_to_existing(
         # Build Cypher query
         cypher = f"""
         MATCH (existing:{existing_label}) WHERE {lookup_condition}
-        CREATE (new_node:{new_label} {new_prop_string})
+        CREATE (new_node{new_labels} {new_prop_string})
         CREATE {rel_pattern}
         RETURN existing, new_node, r
         """
@@ -262,12 +305,18 @@ def create_node_and_relate_to_existing(
             created_new_node = dict(record["new_node"])
             created_rel = dict(record["r"])
 
+            # Get node identifier for logging and return values
+            new_identifier = new_node.get("node_type", new_node.get("label", "unknown"))
+
             logger.info(
-                f"Created {new_label} node and related to existing {existing_label}"
+                f"Created {new_identifier} node and related to existing {existing_label}"
             )
 
             return {
-                "new_node": {"label": new_label, "properties": created_new_node},
+                "new_node": {
+                    "node_type": new_identifier,
+                    "properties": created_new_node,
+                },
                 "existing_node": {"label": existing_label, "properties": existing_node},
                 "relationship": {
                     "type": edge_label,
