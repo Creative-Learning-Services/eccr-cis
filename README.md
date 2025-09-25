@@ -128,7 +128,6 @@ docker-compose logs -f
 make up              # Start all services
 make down            # Stop all services
 make build           # Rebuild and start
-make test            # Run all tests
 make clean           # Clean up Docker resources
 make restart         # Restart services
 make logs            # View all logs
@@ -435,9 +434,11 @@ Checks the health of the API and Neo4j database connection.
 
 ## Data Structure
 
-The ECCR system follows the DCWF (DoD Cyber Workforce Framework) hierarchical structure and is compliant with SCD 1.0 (Structured Competency Description) standards.
+The ECCR mvp graph service incorporates the DCWF (DoD Cyber Workforce Framework)and DOT&E (Director, Operational Test & Evaluation) hierarchical structure and is compliant with SCD 1.0 (Shareable Competency Definition) standards.
 
 ### Node Types and Labels
+
+#### DCWF
 
 The system uses multi-label nodes to represent the hierarchical structure:
 
@@ -449,9 +450,14 @@ The system uses multi-label nodes to represent the hierarchical structure:
   - `IntermediateWorkRole:Competency` - Intermediate work role competencies
   - `KSATSkill:Competency` - Knowledge, Skills, Abilities, and Tasks
 
+#### DOT&E
+
+- **Frameworks**: `Framework` - DOT&E frameworks
+- **Competencies**: `Competency:DoteKsat` - DOT&E competencies
+
 ### Property Structure
 
-All entities use `id` as the primary identifier (not `uid`) and include:
+All entities use `id` as the primary identifier **(not `uid`)** and include:
 
 - `id`: Unique identifier
 - `name`: Display name
@@ -464,8 +470,15 @@ All entities use `id` as the primary identifier (not `uid`) and include:
 
 The system uses specific relationship types:
 
+#### DCWF Relationships
+
 - `HAS_SUBFRAMEWORK`: Framework hierarchy relationships
 - `REQUIRES`: Competency requirements and dependencies
+- `REQUIRES_COMPETENCY`: ksat to competency requirements
+
+#### DOT&E Relationships
+
+- `HAS_COMPETENCY`: Framework to competency and doteKsat to doteKsat relationships
 
 ## Supported Node Types
 
@@ -485,6 +498,7 @@ The API supports the following node types with JSON schema validation:
 - `Framework`
 - `FunctionalCommunity`
 - `WorkforceElement`
+- `DoteKsat`
 
 Each node type has its own JSON schema located in `app/eccr/schemas/`.
 
@@ -573,24 +587,74 @@ python manage.py test eccr.tests -v 2
 
 ### Test Coverage
 
-- **API Tests** (8 tests passing)
+- **API Tests** (8 tests passing) - `eccr/tests/test_api.py`
 
-  - Framework listing and detail retrieval
-  - Competency listing and detail retrieval
-  - Work role listing and detail retrieval
-  - Framework-competency associations
+  - `test_competency_list` - Test competency listing endpoint with pagination
+  - `test_competency_detail` - Test retrieving individual Job competency details
+  - `test_framework_list` - Test framework listing endpoint with pagination
+  - `test_framework_with_competencies` - Test framework-competency associations endpoint
+  - `test_workrole_list_and_detail` - Test work role listing and detail endpoints
+  - `test_workrole_competency_detail` - Test retrieving Advanced Work Role competency details
+  - `test_ksat_competency_detail` - Test retrieving KSAT competency details
+  - `test_framework_hierarchy` - Test DCWF framework hierarchy and SCD 1.0 compliance
 
-- **Graph Operations Tests** (14 tests passing)
+- **Graph Operations Tests** (14 tests passing) - `eccr/tests/test_graph_operations.py`
 
-  - Payload validation tests
-  - API endpoint tests with mocked dependencies
-  - Repository layer tests
-  - Service layer tests
+  **Payload Validation Tests (7 tests):**
 
-- **Integration Tests** (5 tests passing)
-  - Full request/response cycle tests
-  - Real JSON schema validation
-  - Error handling and edge cases
+  - `test_validate_create_nodes_payload_success` - Valid create nodes payload validation
+  - `test_validate_create_nodes_payload_missing_operation` - Missing operation field validation
+  - `test_validate_create_nodes_payload_wrong_operation` - Wrong operation type validation
+  - `test_validate_create_nodes_payload_empty_nodes` - Empty nodes list validation
+  - `test_validate_create_relationship_payload_success` - Valid create relationship payload validation
+  - `test_validate_create_relationship_to_existing_payload_success` - Valid create relationship to existing payload validation
+
+  **API Endpoint Tests (7 tests):**
+
+  - `test_create_nodes_endpoint_success` - Successful node creation via API with mocked service
+  - `test_create_relationship_endpoint_success` - Successful relationship creation via API with mocked service
+  - `test_create_relationship_to_existing_endpoint_success` - Successful relationship to existing node creation via API
+  - `test_create_nodes_endpoint_validation_error` - API validation error handling for invalid payloads
+  - `test_health_endpoint_success` - Health check endpoint when database is accessible
+  - `test_health_endpoint_failure` - Health check endpoint when database connection fails
+
+- **Integration Tests** (5 tests passing) - `eccr/tests/test_integration.py`
+
+  - `test_create_nodes_only_payload` - Full integration test using create_nodes_only.json test data
+  - `test_create_node_to_node_relationship_payload` - Full integration test using create_node_to_node_relationship.json test data
+  - `test_create_node_relate_to_existing_payload` - Full integration test using create_node_relate_to_existing.json test data
+  - `test_create_nodes_validation_error` - Integration test for validation errors with invalid node labels
+  - `test_missing_required_fields` - Integration test for missing required fields validation
+
+- **Repository Tests** (5 tests passing) - `eccr/tests/test_repositories.py`
+
+  - `test_list_competencies` - Test competency repository listing functionality
+  - `test_get_competency` - Test competency repository detail retrieval
+  - `test_list_frameworks_and_competency_count` - Test framework repository listing with competency counts
+  - `test_framework_with_competencies` - Test framework repository competency association retrieval
+  - `test_list_workroles` - Test work role repository listing functionality
+
+- **Label Mapping Tests** (11 tests passing) - `eccr/tests/test_label_mapping.py`
+
+  **Label Mapping Manager Tests (5 tests):**
+
+  - `test_label_mapping_manager_basic_functionality` - Test single label to multi-label mapping (DCWFFramework:Framework, Job:Competency)
+  - `test_label_mapping_manager_schema_files` - Test schema file retrieval for mapped labels
+  - `test_label_mapping_manager_superset_labels` - Test getting single labels for superset categories
+  - `test_build_node_labels_with_single_label` - Test Cypher label string building from single labels
+  - `test_build_node_labels_legacy_compatibility` - Test fallback behavior for unmapped labels
+
+  **Payload Validation with Mapping Tests (2 tests):**
+
+  - `test_payload_validation_with_mapped_labels` - Test validation works with mapped labels (DCWFFramework → DCWFFramework:Framework)
+  - `test_error_handling_for_invalid_node_structure` - Test error handling for invalid node structures
+
+  **Service Integration Tests (4 tests):**
+
+  - `test_graph_service_create_nodes_with_label_mapping` - Test graph service uses label mapping correctly in Cypher queries
+  - `test_end_to_end_label_mapping_flow` - Complete flow test from API payload to Neo4j query with multiple node types
+
+#### Total Test Coverage: 43 tests passing across 6 test files
 
 ### Validation Features
 
@@ -810,18 +874,17 @@ Potential improvements:
 
 ### Graph Operations API
 
-1. Update and delete operations for existing nodes
-2. Bulk operations for better performance
-3. Advanced query endpoints with Cypher support
-4. Graph traversal and pathfinding endpoints
+1. **Schema validation using json files pulled from LDSS**
+2. Update and delete operations for existing nodes
+3. Bulk operations for better performance
+4. Advanced query endpoints with Cypher support
+5. Graph traversal and pathfinding endpoints
 
 ### System-wide Enhancements
 
 1. Authentication and authorization
 2. API versioning and backwards compatibility
-3. Rate limiting and performance optimization
-4. Enhanced error handling and logging
-5. Async processing for large operations
-6. Caching for frequently accessed data
-7. Real-time notifications for data changes
-8. Graph visualization and analytics endpoints
+3. Enhanced error handling and logging
+4. Async processing for large operations
+5. Caching for frequently accessed data
+6. Graph visualization and analytics endpoints
