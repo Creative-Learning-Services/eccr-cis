@@ -1,0 +1,302 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema#",
+    "title": "DoD T&E Competency Profile Graph Ingest",
+    "type": "object",
+    "properties": {
+        "schema_profile": {
+            "const": "competency"
+        },
+        "records": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "source": {
+                        "type": "object",
+                        "properties": {
+                            "label": {
+                                "type": "string",
+                                "enum": [
+                                    "Competency",
+                                    "DoteKsat"
+                                ]
+                            },
+                            "properties": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "authoritative_source": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "authoritativeSource": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "resource_association": {
+                                        "type": "string"
+                                    },
+                                    "resourceAssociation": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "profile": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "domain": {
+                                        "type": "string"
+                                    },
+                                    "competencyStatement": {
+                                        "type": "string"
+                                    },
+                                    "competency_statement": {
+                                        "type": "string"
+                                    },
+                                    "competencyFramework": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "competency_framework": {
+                                        "type": "string"
+                                    },
+                                    "referenceCode": {
+                                        "type": "string"
+                                    },
+                                    "reference_code": {
+                                        "type": "string"
+                                    },
+                                    "competencyLevel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Intermediate",
+                                            "Advanced",
+                                            "Expert"
+                                        ]
+                                    },
+                                    "competency_level": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Intermediate",
+                                            "Advanced",
+                                            "Expert"
+                                        ]
+                                    },
+                                    "typeLabel": {
+                                        "type": "string"
+                                    },
+                                    "type_label": {
+                                        "type": "string"
+                                    },
+                                    "typeUri": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "type_uri": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "ksat_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Knowledge",
+                                            "Skill",
+                                            "Ability",
+                                            "Task"
+                                        ]
+                                    },
+                                    "association": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "name"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "label",
+                            "properties"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "destination": {
+                        "type": "object",
+                        "properties": {
+                            "label": {
+                                "type": "string",
+                                "enum": [
+                                    "Competency",
+                                    "DoteKsat"
+                                ]
+                            },
+                            "properties": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "authoritative_source": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "authoritativeSource": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "resource_association": {
+                                        "type": "string"
+                                    },
+                                    "resourceAssociation": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "profile": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "domain": {
+                                        "type": "string"
+                                    },
+                                    "competencyStatement": {
+                                        "type": "string"
+                                    },
+                                    "competency_statement": {
+                                        "type": "string"
+                                    },
+                                    "competencyFramework": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "competency_framework": {
+                                        "type": "string"
+                                    },
+                                    "referenceCode": {
+                                        "type": "string"
+                                    },
+                                    "reference_code": {
+                                        "type": "string"
+                                    },
+                                    "competencyLevel": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Intermediate",
+                                            "Advanced",
+                                            "Expert"
+                                        ]
+                                    },
+                                    "competency_level": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Intermediate",
+                                            "Advanced",
+                                            "Expert"
+                                        ]
+                                    },
+                                    "typeLabel": {
+                                        "type": "string"
+                                    },
+                                    "type_label": {
+                                        "type": "string"
+                                    },
+                                    "typeUri": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "type_uri": {
+                                        "type": "string",
+                                        "format": "uri"
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "ksat_type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "Knowledge",
+                                            "Skill",
+                                            "Ability",
+                                            "Task"
+                                        ]
+                                    },
+                                    "association": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "id",
+                                    "name"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "label",
+                            "properties"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "edge_label": {
+                        "type": "string",
+                        "enum": [
+                            "HAS_COMPETENCY",
+                            "has_competency"
+                        ]
+                    }
+                },
+                "required": [
+                    "source",
+                    "destination",
+                    "edge_label"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "required": [
+        "schema_profile",
+        "records"
+    ],
+    "additionalProperties": false
+}
