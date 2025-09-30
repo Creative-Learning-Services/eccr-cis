@@ -13,9 +13,11 @@ graph TD;
                 1("System")-->|MVP|2("System");
                 1("System")-.->|Future Planned|2("System");
         end
-        subgraph External
+        subgraph External Sources
                 LDSS;
                 XIA;
+        end
+        subgraph External Dependents
                 ECC;
                 ELRR;
                 EDLM[EDLM Portal];
