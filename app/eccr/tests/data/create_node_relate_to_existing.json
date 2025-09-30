@@ -1,0 +1,49 @@
+{
+    "operation": "create_relationship_to_existing",
+    "new_node": {
+        "label": "KsatsAbility",
+        "properties": {
+            "id": "KSAT-108",
+            "name": "Threat Intelligence Analysis",
+            "description": "Ability to analyze and interpret threat intelligence data to identify emerging threats and attack patterns.",
+            "competencyStatement": "Can analyze threat intelligence feeds and produce actionable intelligence reports",
+            "type": "Ability",
+            "typeURI": "https://ksat.nist.gov/KSAT/Ability",
+            "AssessmentRubric": "https://rubrics.cyber/ksat-108",
+            "Owner": "NIST",
+            "NISTID": [
+                "NIST-SP-800-181"
+            ],
+            "DCWFID": [
+                "DCWF-108"
+            ],
+            "profile": [
+                "ksats",
+                "competency",
+                "ability"
+            ],
+            "conformsTo": "SCD 1.0"
+        }
+    },
+    "existing_node_reference": {
+        "label": "Job",
+        "lookup_method": "by_id",
+        "lookup_value": "WR-AN-EX-232",
+        "description": "Reference to existing Exploitation Analyst job node"
+    },
+    "relationship": {
+        "edge_label": "SUPPORTS",
+        "direction": "from_existing_to_new",
+        "properties": {
+            "relationship_type": "job_ability_requirement",
+            "created_date": "2025-09-19",
+            "criticality": "essential",
+            "validation_status": "pending_review"
+        }
+    },
+    "validation": {
+        "check_existing_node": true,
+        "fail_if_not_exists": true,
+        "create_if_duplicate": false
+    }
+}

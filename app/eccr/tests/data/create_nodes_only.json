@@ -1,0 +1,124 @@
+{
+    "operation": "create_nodes",
+    "nodes": [
+        {
+            "label": "DCWFFramework",
+            "properties": {
+                "id": "DCWFF-200",
+                "name": "DoD Cyber Workforce Framework - Version 2",
+                "description": "Updated Department of Defense's standardized system for describing and managing its cyber-related personnel",
+                "authoritativeSource": "https://public.cyber.mil/dcwf-framework-v2",
+                "competencyDefinition": [
+                    "CD-EXPL-004",
+                    "CD-INTEL-005",
+                    "CD-VULN-006"
+                ],
+                "profile": [
+                    "Framework",
+                    "DCWFFramework"
+                ],
+                "domain": "DCWF",
+                "conformsTo": "SCD 1.0"
+            }
+        },
+        {
+            "label": "Job",
+            "properties": {
+                "id": "WR-AN-EX-232",
+                "name": "Senior Exploitation Analyst",
+                "description": "Lead analyst who partners with cyberspace operations customers to identify and satisfy access and collection gaps through advanced cyberspace exploitation techniques.",
+                "competencyStatement": "Senior Job of Exploitation Analyst within DCWF with leadership responsibilities",
+                "isSupportedBy": [
+                    "RA-CYBER-002",
+                    "RA-INTEL-004"
+                ],
+                "type": "Job",
+                "typeURI": "https://ksat.nist.gov/Job",
+                "markings": [
+                    "UNCLASSIFIED"
+                ],
+                "LocationName": "Fort Meade, MD",
+                "JobSalary": "GS-13/14",
+                "JobTravelCode": "10% Travel",
+                "PromotionPotential": "GS-15",
+                "careerpathway": [
+                    "CP-INTEL-002",
+                    "CP-CYBER-004"
+                ],
+                "AssessmentRubric": "https://rubrics.cyber/senior_exploitation_analyst",
+                "NISTID": [
+                    "NIST-SP-800-181"
+                ],
+                "DCWFID": [
+                    "DCWF-102"
+                ],
+                "profile": [
+                    "job",
+                    "competency"
+                ],
+                "conformsTo": "SCD 1.0"
+            }
+        },
+        {
+            "label": "KsatsSkill",
+            "properties": {
+                "id": "KSAT-205",
+                "name": "Advanced Penetration Testing",
+                "description": "Skill in conducting advanced penetration testing against complex systems and networks.",
+                "competencyStatement": "Can conduct advanced penetration testing using sophisticated techniques and tools",
+                "type": "Skill",
+                "typeURI": "https://ksat.nist.gov/KSAT/Skill",
+                "AssessmentRubric": "https://rubrics.cyber/ksat-105",
+                "Owner": "NIST",
+                "NISTID": [
+                    "NIST-SP-800-181"
+                ],
+                "DCWFID": [
+                    "DCWF-105"
+                ],
+                "profile": [
+                    "ksats",
+                    "competency",
+                    "skill"
+                ],
+                "conformsTo": "SCD 1.0"
+            }
+        },
+        {
+            "label": "DCWFCompetency",
+            "properties": {
+                "id": "DCWF-COMP-202",
+                "name": "Incident Response Management",
+                "description": "Ability to lead and coordinate incident response activities across multiple teams.",
+                "competencyStatement": "Can lead incident response teams and coordinate multi-faceted security incident investigations.",
+                "isSupportedBy": [
+                    "RA-CYBER-003",
+                    "RA-MGMT-001"
+                ],
+                "resourceAssociation": [
+                    "https://resources.cyber/dcwf2"
+                ],
+                "competencyFramework": [
+                    "https://frameworks.cyber/dcwf"
+                ],
+                "referenceCode": "IRM-001",
+                "competencyLevel": "Expert",
+                "typeLabel": "Management Skill",
+                "typeUri": "https://types.cyber/management-skill",
+                "AssessmentRubric": "https://rubrics.cyber/ksat/incidentresponsemanagement",
+                "NISTID": [
+                    "NIST-SP-800-1232"
+                ],
+                "DCWFID": [
+                    "Comp190124"
+                ],
+                "conformsTo": "SCD 1.0",
+                "profile": [
+                    "DCWFCompetency",
+                    "Competency"
+                ],
+                "domain": "DCWF"
+            }
+        }
+    ]
+}
