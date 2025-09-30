@@ -3,7 +3,7 @@ neo4j
 __pycache__
 *.sqlite3
 README.md
-data
+/data
 logs
 plugins
 .env
