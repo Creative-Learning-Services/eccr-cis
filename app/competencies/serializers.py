@@ -18,7 +18,7 @@ class SpoofedSerializer(serializers.Serializer):
     """
 
     def to_representation(self, instance):
-        return instance.__properties__
+        return dict(instance.items())
 
 
 class DynamicNodeSerializer(serializers.Serializer):
