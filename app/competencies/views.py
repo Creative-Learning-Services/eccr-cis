@@ -273,8 +273,8 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
         # get relationships
         query_resp = db.cypher_query(
             '''
-            MATCH (:NeoDomain {uuid: $domain_id})-[:HOLDS]->({uuid: $node_id})-[r]->()
-            RETURN r
+            MATCH (:NeoDomain {uuid: $domain_id})-[:HOLDS]->({uuid: $node_id})-[r]->(m)
+            RETURN r, m
             ''',
             {
                 'domain_id': self.kwargs['provider_id'],
