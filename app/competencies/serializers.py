@@ -18,6 +18,8 @@ class SpoofedSerializer(serializers.Serializer):
     """
 
     def to_representation(self, instance):
+        if isinstance(instance, list):
+            return dict(instance[0].items())
         return dict(instance.items())
 
 

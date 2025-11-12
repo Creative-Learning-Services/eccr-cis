@@ -23,8 +23,12 @@ class GenericNode():
     """
 
     def __init__(self, items: typing.ItemsView[str, typing.Any]):
+        self.__attributes = set()
         for k, v in items:
             self._add_attr(k, v)
+
+    def _attributes(self, k):
+        self.__attributes.add(k)
 
     def _add_attr(self, k, v):
         if hasattr(self, k):
@@ -35,12 +39,19 @@ class GenericNode():
                 setattr(self, k, [curr, v])
         else:
             setattr(self, k, v)
+        self._attributes(k)
+
+    def __repr__(self):
+        return str({k: getattr(self, k) for k in self.__attributes})
 
 
 class LazyNeoQuery():
     """
     Class for setting up Neo4j queries in a lazy way
     """
+    # Pretty much a copy of how QuerySets work
+    # currently not a subclass of QuerySets as content diverges so much
+    # but this might change in the future
 
     def __init__(self, obj: StructuredNode, query: str, order: str = "n.uuid"):
         """
@@ -94,7 +105,6 @@ class LazyNeoQuery():
             self._chain,
             self._get_filter_clause(),
             'RETURN count(*)',
-            self.order,
             self.skip,
             self.limit]),
             self._args)[0][0][0]
@@ -255,29 +265,29 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
         # get base object in case no relationships
         query_resp = db.cypher_query(
             '''
-            MATCH (:NeoDomain {uuid: $domain_id})-[:HOLDS]->(n{uuid: $node_id})
+            MATCH (d:NeoDomain {name: $domain_name})-[:HOLDS]->(n{uuid: $node_id})
             RETURN n
             LIMIT 1
             ''',
             {
-                'domain_id': self.kwargs['provider_id'],
+                'domain_name': self.kwargs['provider_id'],
                 'node_id': self.kwargs['experience_id'],
-            })[0][0]
+            })[0]
 
         if not query_resp:
             raise Http404
 
         # add attributes
-        node = GenericNode(query_resp[0].items())
+        node = GenericNode(query_resp[0][0].items())
 
         # get relationships
         query_resp = db.cypher_query(
             '''
-            MATCH (:NeoDomain {uuid: $domain_id})-[:HOLDS]->({uuid: $node_id})-[r]->(m)
+            MATCH (:NeoDomain {name: $domain_name})-[:HOLDS]->({uuid: $node_id})-[r]->(m)
             RETURN r, m
             ''',
             {
-                'domain_id': self.kwargs['provider_id'],
+                'domain_name': self.kwargs['provider_id'],
                 'node_id': self.kwargs['experience_id'],
             })[0]
         # add relationships to uuid
