@@ -1,6 +1,7 @@
+from neomodel import db
 from rest_framework import fields, serializers
 
-from competencies.models import DjangoDomain
+from competencies.models import DjangoDomain, GenericNode
 
 
 class DjangoDomainSerializer(serializers.ModelSerializer):
@@ -107,8 +108,22 @@ class DynamicNodeSerializer(serializers.Serializer):
         """
         return super().create(validated_data)
 
-    def update(self, instance, validated_data):
+    def update(self, instance: GenericNode, validated_data: dict):
         """
         Make Neo4j query to update existing obj
         """
-        return super().update(instance, validated_data)
+        for key, value in validated_data.items():
+            setattr(self.instance, key, value)
+
+        updated_node = db.cypher_query(
+            '''
+            MATCH (n{uuid: $node_id})
+            SET n = $props
+            RETURN n
+            ''',
+            {
+                'node_id': instance.uuid,
+                'props': vars(self.instance),
+            })[0][0][0]
+
+        self.instance = GenericNode(updated_node)

@@ -1,3 +1,4 @@
+import typing
 from uuid import UUID
 
 from django.db import models
@@ -78,3 +79,29 @@ class CompetencyPermissions(models.Model):
         return DjangoSemiStructuredCompetency.nodes.get(uuid=self.uuid.hex)
 
     neo4j = property(_get_neo4j_object)
+
+
+class GenericNode():
+    """
+    Class to store generic attributes and relationships
+    """
+
+    def __init__(self, items: typing.ItemsView[str, typing.Any]):
+        # self._attributes = set()
+        for k, v in items:
+            self._add_attr(k, v)
+
+    def _add_attr(self, k, v):
+        if hasattr(self, k):
+            curr = getattr(self, k)
+            if isinstance(curr, list):
+                curr.append(v)
+            else:
+                setattr(self, k, [curr, v])
+        else:
+            setattr(self, k, v)
+        # self._attributes.add(k)
+
+    def __repr__(self):
+        return str(vars(self))
+        # {k: getattr(self, k) for k in self._attributes})

@@ -1,5 +1,4 @@
 import json
-import typing
 
 from django.core.paginator import Paginator
 from django.http import Http404
@@ -11,38 +10,10 @@ from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
-from competencies.models import DjangoDomain, NeoDomain
+from competencies.models import DjangoDomain, GenericNode, NeoDomain
 from competencies.serializers import DynamicNodeSerializer, SpoofedSerializer
 
 # Create your views here.
-
-
-class GenericNode():
-    """
-    Class to store generic attributes and relationships
-    """
-
-    def __init__(self, items: typing.ItemsView[str, typing.Any]):
-        self.__attributes = set()
-        for k, v in items:
-            self._add_attr(k, v)
-
-    def _attributes(self, k):
-        self.__attributes.add(k)
-
-    def _add_attr(self, k, v):
-        if hasattr(self, k):
-            curr = getattr(self, k)
-            if isinstance(curr, list):
-                curr.append(v)
-            else:
-                setattr(self, k, [curr, v])
-        else:
-            setattr(self, k, v)
-        self._attributes(k)
-
-    def __repr__(self):
-        return str({k: getattr(self, k) for k in self.__attributes})
 
 
 class LazyNeoQuery():
