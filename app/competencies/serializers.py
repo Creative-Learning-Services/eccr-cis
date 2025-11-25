@@ -99,6 +99,10 @@ class DynamicNodeSerializer(serializers.Serializer):
         ret_dict = {}
         if isinstance(serializer, serializers.UUIDField):
             ret_dict['format'] = 'hex'
+        if schema.get('use', '').lower() == 'optional':
+            ret_dict['required'] = False
+        if schema.get('relationship', False):
+            ret_dict['read_only'] = True
 
         return ret_dict
 
@@ -115,6 +119,10 @@ class DynamicNodeSerializer(serializers.Serializer):
         for key, value in validated_data.items():
             setattr(self.instance, key, value)
 
+        args = vars(self.instance)
+        for name, serializer in self.fields.items():
+            if serializer.read_only:
+                args.pop(name)
         updated_node = db.cypher_query(
             '''
             MATCH (n{uuid: $node_id})
@@ -123,7 +131,8 @@ class DynamicNodeSerializer(serializers.Serializer):
             ''',
             {
                 'node_id': instance.uuid,
-                'props': vars(self.instance),
+                'props': args,
             })[0][0][0]
 
-        self.instance = GenericNode(updated_node)
+        self.instance = GenericNode(updated_node.items())
+        return self.instance

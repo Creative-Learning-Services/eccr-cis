@@ -93,7 +93,7 @@ DATABASES = {
 
 Environment variables supported:
   NEO4J_BOLT_URI (preferred) e.g. bolt://neo4j:7687
-  NEO4J_URI (fallback legacy)   
+  NEO4J_URI (fallback legacy)
   NEO4J_USERNAME (optional, default neo4j)
   NEO4J_PASSWORD (optional, blank means no auth)
 
@@ -108,6 +108,11 @@ NEO4J_BOLT_URI = (
 NEO4J_USERNAME = os.getenv("NEO4J_USERNAME", "neo4j")
 NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 # Django REST Framework configuration
 REST_FRAMEWORK = {
     # "DEFAULT_RENDERER_CLASSES": [
@@ -118,6 +123,11 @@ REST_FRAMEWORK = {
     # ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "PAGE_SIZE": 20,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'knox.auth.TokenAuthentication',
+        # 'p1_auth.backends.PlatformOneRestAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
 
 SPECTACULAR_SETTINGS = {
