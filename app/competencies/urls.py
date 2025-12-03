@@ -8,6 +8,7 @@ router = DefaultRouter()
 app_name = 'competencies'
 
 urlpatterns = [
+    path('metadata/', views.NodeCreation.as_view(), name='metadata'),
     path('managed-data/catalogs', views.DomainList.as_view(),
          name='managed-catalog'),
     path('managed-data/catalogs/<str:provider_id>',

@@ -37,6 +37,9 @@ class DynamicNodeSerializer(serializers.Serializer):
     }
     data_type_key = 'data_type'
     multiple_expected_key = 'multiple_expected'
+    domain_relationship_backtrack = 'WITHIN'
+    domain_relationship = 'HOLDS'
+    relationships = []
 
     def __init__(self, *args, **kwargs):
         profile = kwargs.pop('profile', None)
@@ -46,6 +49,9 @@ class DynamicNodeSerializer(serializers.Serializer):
         if profile is None and self.instance and hasattr(self.instance, 'profile') and\
                 self.instance.profile:
             profile = self.instance.profile
+
+        # track profiles for use in labels
+        self.profiles = ['TestProfile', 'Framework']
 
         assert profile is not None, "No Profile provided or found on the instance"
 
@@ -102,27 +108,63 @@ class DynamicNodeSerializer(serializers.Serializer):
         if schema.get('use', '').lower() == 'optional':
             ret_dict['required'] = False
         if schema.get('relationship', False):
-            ret_dict['read_only'] = True
+            self.relationships.append(field)
+            ret_dict['required'] = False
 
         return ret_dict
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         """
         Make Neo4j query to create obj
         """
-        return super().create(validated_data)
+        # if backtrack relationship exists, pull it
+        domain = validated_data.pop(self.domain_relationship_backtrack, None)
+
+        # pop any fields that are relationships
+        for field in self.relationships:
+            validated_data.pop(field, None)
+
+        # if domain was included, add the domain relationship when creating
+        query = '''
+                MATCH (d:NeoDomain {uuid: $domain})
+                CREATE (n:$($labels) $props)
+                CREATE (d)-[:$($rel_label)]->(n)
+                RETURN n
+                ''' if domain else\
+                '''
+                CREATE (n:$($labels) $props)
+                RETURN n
+                '''
+
+        # make cypher query to create node and relationship
+        node = db.cypher_query(
+            query,
+            {
+                'props': validated_data,
+                'labels': self.profiles,
+                'rel_label': self.domain_relationship,
+                'domain': domain
+            })[0][0][0]
+
+        self.instance = GenericNode(node.items())
+        return self.instance
 
     def update(self, instance: GenericNode, validated_data: dict):
         """
         Make Neo4j query to update existing obj
         """
+        # update values on instance
         for key, value in validated_data.items():
             setattr(self.instance, key, value)
 
+        # get values for attributes
         args = vars(self.instance)
-        for name, serializer in self.fields.items():
-            if serializer.read_only:
-                args.pop(name)
+
+        # drop any fields that are relationships
+        for field in self.relationships:
+            args.pop(field, None)
+
+        # make cypher query to update node
         updated_node = db.cypher_query(
             '''
             MATCH (n{uuid: $node_id})

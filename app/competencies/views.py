@@ -6,7 +6,8 @@ from django.utils.functional import cached_property
 from neomodel import db
 from neomodel.sync_.core import StructuredNode
 from rest_framework import filters, pagination, status
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import (CreateAPIView, ListAPIView,
+                                     RetrieveUpdateAPIView)
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
@@ -161,6 +162,14 @@ class CustomPagination(pagination.PageNumberPagination):
 
     # def paginate_queryset(self, queryset, request, view=None):
     #     return super().paginate_queryset(queryset, request, view)
+
+
+class NodeCreation(CreateAPIView):
+    """
+    Create Nodes
+    """
+    serializer_class = DynamicNodeSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 class DomainList(ListAPIView):
