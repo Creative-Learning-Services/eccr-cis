@@ -1,3 +1,4 @@
+from competencies.management.utils.xss_client import read_json_data
 from neomodel import db
 from rest_framework import fields, serializers
 
@@ -42,23 +43,27 @@ class DynamicNodeSerializer(serializers.Serializer):
     relationships = []
 
     def __init__(self, *args, **kwargs):
+
+        # get profile from kwargs or instance
         profile = kwargs.pop('profile', None)
         super().__init__(*args, **kwargs)
 
         # get profile
-        if profile is None and self.instance and hasattr(self.instance, 'profile') and\
+        if profile is None and self.instance and \
+            hasattr(self.instance, 'profile') and\
                 self.instance.profile:
             profile = self.instance.profile
+        else:
+            profile = self.initial_data.get('profile', None)
 
         # track profiles for use in labels
-        self.profiles = ['TestProfile', 'Framework']
+        self.profiles = profile if isinstance(profile, list) else [profile]
 
-        assert profile is not None, "No Profile provided or found on the instance"
+        assert profile is not None, \
+            "No Profile provided or found on the instance"
 
-        # TODO: resolve profile
+        profile = read_json_data(profile[0])
 
-        # for field in profile
-        # self.fields[field_name] = serializer
         # ex
         # {'uuid': UUIDField(read_only=True, source='neo4j.uuid'),
         #  'name': CharField(read_only=True, source='neo4j.name')}
@@ -77,8 +82,10 @@ class DynamicNodeSerializer(serializers.Serializer):
             if self.multiple_expected_key in field_dict and \
                     field_dict[self.multiple_expected_key]:
                 # use list and get args for serializer
-                self.fields[field] = serializers.ListField(child=field_serializer(
-                    **self.serializer_args(field, field_dict, field_serializer)))
+                self.fields[field] = \
+                    serializers.ListField(child=field_serializer(
+                        **self.serializer_args(field,
+                                               field_dict, field_serializer)))
             else:
                 # get serializer args
                 self.fields[field] = field_serializer(

@@ -2,6 +2,7 @@ import typing
 from uuid import UUID
 
 from django.db import models
+from django.forms import ValidationError
 from django_neomodel import DjangoNode
 from neomodel import (One, RelationshipTo, StringProperty, UniqueIdProperty,
                       ZeroOrOne)
@@ -105,3 +106,18 @@ class GenericNode():
     def __repr__(self):
         return str(vars(self))
         # {k: getattr(self, k) for k in self._attributes})
+
+
+class Configuration(models.Model):
+    """
+    Model to store configuration values
+    """
+    ldss_host = models.CharField(
+        help_text='Enter the host url for the LDSS (Schema Service) to use.',
+        max_length=200
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.pk and Configuration.objects.exists():
+            raise ValidationError('Configuration model already exists')
+        return super(Configuration, self).save(*args, **kwargs)
