@@ -86,6 +86,12 @@ class LazyNeoQuery():
         add filters to a query
         """
         self._filters.add(filter_str)
+        self.add_param(param)
+
+    def add_param(self, param):
+        """
+        add params to be passed to the query
+        """
         self._args.update(param)
 
     def _get_filter_clause(self):
@@ -203,16 +209,23 @@ class DomainSubGraphList(ListAPIView):
     def get_queryset(self):
         """override queryset to filter using provider_id"""
 
+        # get domain from provider, will be a human readable name
         provider_id = self.kwargs['provider_id']
+
+        # add any fields we need to search
         if 'fields' in self.request.GET and\
                 self.request.GET.get('fields') is not None:
             self.search_fields += self.request.GET.get('fields').\
                 replace('.', '__').split(',')
 
+        # get the domain based on the name
+        nd = NeoDomain.nodes.get(name=provider_id)
+        # setup the base query for objects under the domain
         queryset = LazyNeoQuery(
-            NeoDomain.nodes.get(name=provider_id),
-            "MATCH (:NeoDomain {element_id_property: $self})-[r:HOLDS]->(n)")
+            nd,
+            "MATCH (:NeoDomain {uuid: $self_uuid})-[r:HOLDS]->(n)")
         # figure out how to support slicing and filtering
+        queryset.add_param({"self_uuid": nd.uuid})
 
         return queryset
 
