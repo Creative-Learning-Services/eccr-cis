@@ -1,4 +1,4 @@
-from competencies.management.utils.xss_client import read_json_data
+from competencies.management.utils.ldss_client import read_json_data
 from neomodel import db
 from rest_framework import fields, serializers
 

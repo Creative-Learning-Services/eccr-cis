@@ -16,13 +16,11 @@ def ldss_get():
 
 
 def read_json_data(schema_ref):
-    """get schema from xss and ingest as dictionary values"""
+    """get schema from ldss and ingest as dictionary values"""
     # check cache for schema
     cached_schema = cache.get(schema_ref)
     if cached_schema:
         return cached_schema
-
-    print(f"Fetching schema from XSS: {schema_ref}")
 
     # if not in cache, connect to api
     ldss_host = ldss_get()
