@@ -1,9 +1,10 @@
 import json
 import os
-from typing import Dict, Any, List, Optional
-from jsonschema import validate, ValidationError, RefResolver
+from typing import Any, Dict, List, Optional
+
 from django.conf import settings
 from eccr.utils.label_mapping import label_mapping_manager
+from jsonschema import RefResolver, ValidationError, validate
 
 
 class SchemaValidationError(Exception):

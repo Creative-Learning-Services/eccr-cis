@@ -1,5 +1,6 @@
-from typing import Dict, Any, List, Optional, Tuple
 import logging
+from typing import Any, Dict, List, Optional, Tuple
+
 from eccr.neo4j_driver import get_driver
 from eccr.utils.label_mapping import label_mapping_manager
 

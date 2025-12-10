@@ -1,9 +1,10 @@
-from rest_framework.response import Response
+from drf_spectacular.utils import (OpenApiParameter, OpenApiResponse,
+                                   extend_schema)
+from eccr.repositories.workrole_repo import get_workrole, list_workroles
+from eccr.serializers.competency import WorkRoleSerializer
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from eccr.serializers.competency import WorkRoleSerializer
-from eccr.repositories.workrole_repo import list_workroles, get_workrole
+from rest_framework.response import Response
 
 
 class WorkRoleListView(GenericAPIView):
@@ -24,7 +25,8 @@ class WorkRoleListView(GenericAPIView):
             ),
             OpenApiParameter(
                 name="skip",
-                description="Number of results to skip for pagination (default: 0)",
+                description="Number of results to skip for pagination "
+                "(default: 0)",
                 required=False,
                 type=int,
             ),

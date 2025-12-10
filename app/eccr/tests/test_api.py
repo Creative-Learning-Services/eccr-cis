@@ -1,8 +1,9 @@
+import uuid
+
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.test import APIClient
 from eccr.neo4j_driver import get_driver
-import uuid
+from rest_framework.test import APIClient
 
 
 class APITests(TestCase):
@@ -18,7 +19,8 @@ class APITests(TestCase):
         print(f"Job Competency ID: {cls.job_id}")
         driver = get_driver()
         with driver.session() as session:
-            # Purge existing nodes for deterministic test behavior (WARNING: destructive; acceptable in test environment)
+            # Purge existing nodes for deterministic test behavior (WARNING:
+            # destructive; acceptable in test environment)
             session.execute_write(
                 lambda tx: tx.run("MATCH (n:Framework) DETACH DELETE n")
             )
@@ -38,7 +40,7 @@ class APITests(TestCase):
                         domain: 'DCWF',
                         conformsTo: 'SCD 1.0'
                     })
-                    
+
                     CREATE (job:Job:Competency {
                         id: $job_id,
                         name: $job_name,
@@ -50,7 +52,7 @@ class APITests(TestCase):
                         domain: 'DCWF',
                         conformsTo: 'SCD 1.0'
                     })
-                    
+
                     CREATE (awr:AdvancedWorkRole:Competency {
                         id: $awr_id,
                         name: $awr_name,
@@ -64,7 +66,7 @@ class APITests(TestCase):
                         domain: 'DCWF',
                         conformsTo: 'SCD 1.0'
                     })
-                    
+
                     CREATE (ksat:KSATSSkill:Competency {
                         id: $ksat_id,
                         name: $ksat_name,
@@ -78,7 +80,7 @@ class APITests(TestCase):
                         domain: 'DCWF',
                         conformsTo: 'SCD 1.0'
                     })
-                    
+
                     // Create relationships matching init.cypher structure
                     CREATE (job)-[:REQUIRES]->(awr)
                     CREATE (awr)-[:REQUIRES_COMPETENCY]->(ksat)
@@ -113,7 +115,7 @@ class APITests(TestCase):
             session.execute_write(
                 lambda tx, params: tx.run(
                     """
-                    MATCH (n) WHERE n.id IN [$f_id, $job_id, $awr_id, $ksat_id] 
+                    MATCH (n) WHERE n.id IN [$f_id, $job_id, $awr_id, $ksat_id]
                     DETACH DELETE n
                     """,
                     **params,
@@ -159,7 +161,8 @@ class APITests(TestCase):
         body = resp.json()
         self.assertEqual(body["framework"]["id"], self.f_id)
         # Note: Framework hierarchy changed - competencies are now attached to jobs, not directly to frameworks
-        # This test may need adjustment based on the API's handling of the new structure
+        # This test may need adjustment based on the API's handling of the new
+        # structure
 
     def test_workrole_list_and_detail(self):
         # Test work role list endpoint

@@ -1,4 +1,5 @@
-from typing import Dict, Any, Optional, List
+from typing import Any, Dict, List, Optional
+
 from eccr.neo4j_driver import get_driver
 
 # Projection constants keep responses consistent
@@ -84,7 +85,7 @@ def get_framework_with_competencies(
 
     competencies_cypher = """
     MATCH (f:Framework {id: $framework_id})-[:HAS_SUBFRAMEWORK*]->(job:Job:Competency)
-    RETURN job.id as id, job.name as name, job.description as description, 
+    RETURN job.id as id, job.name as name, job.description as description,
            job.domain as domain, job.type as type_label
     ORDER BY job.name
     SKIP $skip LIMIT $limit

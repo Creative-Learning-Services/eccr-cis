@@ -1,4 +1,5 @@
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 from eccr.neo4j_driver import get_driver
 
 # Projection constants keep responses consistent
@@ -67,7 +68,8 @@ def get_competency(competency_id: str) -> Optional[Dict[str, Any]]:
     Args:
         competency_id: Unique identifier of the competency
     """
-    # Query all types of competency nodes (Job, WorkRole hierarchies, KSAT types)
+    # Query all types of competency nodes (Job, WorkRole hierarchies, KSAT
+    # types)
     cypher = f"""
     MATCH (n:Competency {{id: $competency_id}})
     RETURN {COMPETENCY_RETURN}

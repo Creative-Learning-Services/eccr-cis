@@ -1,17 +1,12 @@
-from .competency import (
-    CompetencySerializer,
-    WorkRoleSerializer,
-)
-
+from .competency import CompetencySerializer, WorkRoleSerializer
 from .framework import FrameworkSerializer, FrameworkWithCompetenciesSerializer
-
 from .relationships import (
-    RequiresRelSerializer,
-    DependsOnRelSerializer,
-    IsPartOfRelSerializer,
-    IncludesCompetencyRelSerializer,
-    HasCompetencyRelSerializer,
     CompetencyWithRelationshipSerializer,
+    DependsOnRelSerializer,
+    HasCompetencyRelSerializer,
+    IncludesCompetencyRelSerializer,
+    IsPartOfRelSerializer,
+    RequiresRelSerializer,
 )
 
 __all__ = [

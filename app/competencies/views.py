@@ -1,26 +1,25 @@
 import json
 
+from competencies.models import DjangoDomain, GenericNode, NeoDomain
+from competencies.serializers import DynamicNodeSerializer, SpoofedSerializer
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.utils.functional import cached_property
 from neomodel import db
 from neomodel.sync_.core import StructuredNode
 from rest_framework import filters, pagination, status
-from rest_framework.generics import (CreateAPIView, ListAPIView,
-                                     RetrieveUpdateAPIView)
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-
-from competencies.models import DjangoDomain, GenericNode, NeoDomain
-from competencies.serializers import DynamicNodeSerializer, SpoofedSerializer
 
 # Create your views here.
 
 
-class LazyNeoQuery():
+class LazyNeoQuery:
     """
     Class for setting up Neo4j queries in a lazy way
     """
+
     # Pretty much a copy of how QuerySets work
     # currently not a subclass of QuerySets as content diverges so much
     # but this might change in the future
@@ -73,13 +72,18 @@ class LazyNeoQuery():
         """
         if self._result_cache is not None:
             return len(self._result_cache)
-        return self._object.cypher('\n'.join([
-            self._chain,
-            self._get_filter_clause(),
-            'RETURN count(*)',
-            self.skip,
-            self.limit]),
-            self._args)[0][0][0]
+        return self._object.cypher(
+            "\n".join(
+                [
+                    self._chain,
+                    self._get_filter_clause(),
+                    "RETURN count(*)",
+                    self.skip,
+                    self.limit,
+                ]
+            ),
+            self._args,
+        )[0][0][0]
 
     def filter(self, filter_str: str, param: dict):
         """
@@ -105,14 +109,19 @@ class LazyNeoQuery():
     def _resolve_query(self):
         if self._result_cache is not None:
             return len(self._result_cache)
-        self._result_cache = self._object.cypher('\n'.join([
-            self._chain,
-            self._get_filter_clause(),
-            'RETURN n',
-            self.order,
-            self.skip,
-            self.limit]),
-            self._args)[0]
+        self._result_cache = self._object.cypher(
+            "\n".join(
+                [
+                    self._chain,
+                    self._get_filter_clause(),
+                    "RETURN n",
+                    self.order,
+                    self.skip,
+                    self.limit,
+                ]
+            ),
+            self._args,
+        )[0]
         return self._result_cache
 
     @db.read_transaction
@@ -139,7 +148,11 @@ class LazyNeoQuery():
                 self._skip = int(k.start)
             if k.stop is not None:
                 self._limit = int(k.stop) - self._skip if self._skip else 0
-            return list(self._resolve_query())[:: k.step] if k.step else self._resolve_query()
+            return (
+                list(self._resolve_query())[:: k.step]
+                if k.step
+                else self._resolve_query()
+            )
 
         self._skip = int(k)
         self._limit = 1
@@ -162,7 +175,7 @@ class CustomPagination(pagination.PageNumberPagination):
     http://api.example.org/accounts/?page=4&page_size=100"""
 
     page_size = 10
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
     max_page_size = 50
     django_paginator_class = CustomPaginator
 
@@ -174,6 +187,7 @@ class NodeCreation(CreateAPIView):
     """
     Create Nodes
     """
+
     serializer_class = DynamicNodeSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
@@ -182,48 +196,52 @@ class DomainList(ListAPIView):
     """
     List Domains available
     """
+
     queryset = DjangoDomain.objects.all()
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         return Response(
-            json.dumps(
-                [n.name for n in NeoDomain.nodes.all()]
-            ),
-            status=status.HTTP_200_OK)
+            json.dumps([n.name for n in NeoDomain.nodes.all()]),
+            status=status.HTTP_200_OK,
+        )
 
 
 class DomainSubGraphList(ListAPIView):
     """
     List objects connected to chosen Domain
     """
+
     pagination_class = CustomPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = SpoofedSerializer
 
     # add fields to be searched on in the query
-    search_fields = ['metadata_key',
-                     'metadata_key_hash', 'provider_name',
-                     'unique_record_identifier']
+    search_fields = [
+        "metadata_key",
+        "metadata_key_hash",
+        "provider_name",
+        "unique_record_identifier",
+    ]
 
     def get_queryset(self):
         """override queryset to filter using provider_id"""
 
         # get domain from provider, will be a human readable name
-        provider_id = self.kwargs['provider_id']
+        provider_id = self.kwargs["provider_id"]
 
         # add any fields we need to search
-        if 'fields' in self.request.GET and\
-                self.request.GET.get('fields') is not None:
-            self.search_fields += self.request.GET.get('fields').\
-                replace('.', '__').split(',')
+        if "fields" in self.request.GET and self.request.GET.get("fields") is not None:
+            self.search_fields += (
+                self.request.GET.get("fields").replace(".", "__").split(",")
+            )
 
         # get the domain based on the name
         nd = NeoDomain.nodes.get(name=provider_id)
         # setup the base query for objects under the domain
         queryset = LazyNeoQuery(
-            nd,
-            "MATCH (:NeoDomain {uuid: $self_uuid})-[r:HOLDS]->(n)")
+            nd, "MATCH (:NeoDomain {uuid: $self_uuid})-[r:HOLDS]->(n)"
+        )
         # figure out how to support slicing and filtering
         queryset.add_param({"self_uuid": nd.uuid})
 
@@ -251,21 +269,23 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
     """
     Get or update a Node
     """
+
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = DynamicNodeSerializer
 
     def get_object(self):
         # get base object in case no relationships
         query_resp = db.cypher_query(
-            '''
+            """
             MATCH (d:NeoDomain {name: $domain_name})-[:HOLDS]->(n{uuid: $node_id})
             RETURN n
             LIMIT 1
-            ''',
+            """,
             {
-                'domain_name': self.kwargs['provider_id'],
-                'node_id': self.kwargs['experience_id'],
-            })[0]
+                "domain_name": self.kwargs["provider_id"],
+                "node_id": self.kwargs["experience_id"],
+            },
+        )[0]
 
         if not query_resp:
             raise Http404
@@ -275,16 +295,16 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
 
         # get relationships
         query_resp = db.cypher_query(
-            '''
+            """
             MATCH (:NeoDomain {name: $domain_name})-[:HOLDS]->({uuid: $node_id})-[r]->(m)
             RETURN r, m
-            ''',
+            """,
             {
-                'domain_name': self.kwargs['provider_id'],
-                'node_id': self.kwargs['experience_id'],
-            })[0]
+                "domain_name": self.kwargs["provider_id"],
+                "node_id": self.kwargs["experience_id"],
+            },
+        )[0]
         # add relationships to uuid
         for rel, _ in query_resp:
-            node._add_attr(  # pylint: disable=W0212
-                rel.type, rel.end_node['uuid'])
+            node._add_attr(rel.type, rel.end_node["uuid"])  # pylint: disable=W0212
         return node

@@ -1,14 +1,14 @@
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.generics import GenericAPIView
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from eccr.serializers import FrameworkSerializer
-from eccr.serializers.competency import CompetencySerializer
+from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
 from eccr.repositories.framework_repo import (
-    list_frameworks,
     get_framework,
     get_framework_with_competencies,
+    list_frameworks,
 )
+from eccr.serializers import FrameworkSerializer
+from eccr.serializers.competency import CompetencySerializer
+from rest_framework import status
+from rest_framework.generics import GenericAPIView
+from rest_framework.response import Response
 
 
 class FrameworkListView(GenericAPIView):
@@ -19,8 +19,8 @@ class FrameworkListView(GenericAPIView):
         summary="List Frameworks",
         description="""
         Retrieve a paginated list of cybersecurity frameworks.
-        
-        Includes DCWF (Data Center Workforce Framework) and other 
+
+        Includes DCWF (Data Center Workforce Framework) and other
         industry-standard cybersecurity frameworks.
         """,
         parameters=[

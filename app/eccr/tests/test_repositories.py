@@ -1,10 +1,11 @@
 import uuid
+
 from django.test import TestCase
 from eccr.neo4j_driver import get_driver
-from eccr.repositories.competency_repo import list_competencies, get_competency
+from eccr.repositories.competency_repo import get_competency, list_competencies
 from eccr.repositories.framework_repo import (
-    list_frameworks,
     get_framework_with_competencies,
+    list_frameworks,
 )
 from eccr.repositories.workrole_repo import list_workroles
 

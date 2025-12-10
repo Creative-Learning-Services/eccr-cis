@@ -1,9 +1,9 @@
-from rest_framework.response import Response
+from drf_spectacular.utils import OpenApiParameter, OpenApiResponse, extend_schema
+from eccr.repositories.competency_repo import get_competency, list_competencies
+from eccr.serializers.competency import CompetencySerializer
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiResponse
-from eccr.serializers.competency import CompetencySerializer
-from eccr.repositories.competency_repo import list_competencies, get_competency
+from rest_framework.response import Response
 
 
 class CompetencyListView(GenericAPIView):
@@ -14,7 +14,7 @@ class CompetencyListView(GenericAPIView):
         summary="List Competencies",
         description="""
         Retrieve a paginated list of competencies from the ECCR system.
-        
+
         Supports filtering by name and domain to help find specific competencies.
         """,
         parameters=[
@@ -86,7 +86,7 @@ class CompetencyDetailView(GenericAPIView):
         summary="Get Competency Details",
         description="""
         Retrieve detailed information about a specific competency by its ID.
-        
+
         Returns comprehensive information about the competency including
         its properties and relationships.
         """,

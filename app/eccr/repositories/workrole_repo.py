@@ -1,4 +1,5 @@
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 from eccr.neo4j_driver import get_driver
 
 WORKROLE_RETURN = (
@@ -14,7 +15,8 @@ def record_to_dict(record) -> Dict[str, Any]:
 
 
 def list_workroles(limit: int = 5, skip: int = 0) -> Dict[str, Any]:
-    # Query WorkRole competency types (AdvancedWorkRole, IntermediateWorkRole, BasicWorkRole)
+    # Query WorkRole competency types (AdvancedWorkRole, IntermediateWorkRole,
+    # BasicWorkRole)
     cypher = f"""
     MATCH (w:Competency)
     WHERE w:AdvancedWorkRole OR w:IntermediateWorkRole OR w:BasicWorkRole

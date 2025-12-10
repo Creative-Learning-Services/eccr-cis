@@ -1,20 +1,19 @@
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.generics import GenericAPIView
-from rest_framework.parsers import JSONParser
-from django.http import JsonResponse
 import logging
+
+from django.http import JsonResponse
 from drf_spectacular.utils import (
-    extend_schema,
     OpenApiExample,
     OpenApiResponse,
+    extend_schema,
     inline_serializer,
 )
-from rest_framework import serializers
-
-from eccr.services.graph_service import graph_service, GraphOperationError
-from eccr.utils.validation import SchemaValidationError
 from eccr.exceptions import GraphExceptionHandler
+from eccr.services.graph_service import GraphOperationError, graph_service
+from eccr.utils.validation import SchemaValidationError
+from rest_framework import serializers, status
+from rest_framework.generics import GenericAPIView
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
 
 logger = logging.getLogger(__name__)
 
@@ -146,10 +145,10 @@ class CreateRelationshipView(BaseGraphView):
         tags=["Graph Operations - Relationships"],
         summary="Create Nodes with Relationship",
         description="""Create two new nodes and establish a relationship between them in a single operation.
-        
+
         This endpoint is useful when you need to create two related entities simultaneously,
         such as linking a work role to a required competency.
-        
+
         Use Cases:
         • Create a work role and link it to a required skill
         • Create a framework and associate it with a competency
@@ -250,10 +249,10 @@ class CreateRelationshipToExistingView(BaseGraphView):
         tags=["Graph Operations - Relationships"],
         summary="Create Node and Link to Existing",
         description="""Create a new node and establish a relationship with an existing node in the graph.
-        
-        This endpoint is useful when you want to add new entities that relate to 
+
+        This endpoint is useful when you want to add new entities that relate to
         existing ones, such as adding a new skill to an existing work role.
-        
+
         Use Cases:
         • Add new competencies to existing work roles
         • Link new frameworks to existing organizational structures
@@ -360,10 +359,10 @@ class GraphHealthView(GenericAPIView):
         tags=["System Health"],
         summary="Graph Database Health Check",
         description="""Check the connectivity and health of the Neo4j graph database.
-        
+
         This endpoint performs a simple connectivity test to ensure the graph database
         is accessible and responding to queries.
-        
+
         Use Cases:
         • System monitoring and health checks
         • Troubleshooting database connectivity issues

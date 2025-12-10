@@ -1,16 +1,16 @@
 from django.urls import path
 from eccr.views import (
-    FrameworkListView,
-    FrameworkDetailView,
-    FrameworkWithCompetenciesView,
-    CompetencyListView,
     CompetencyDetailView,
-    WorkRoleListView,
-    WorkRoleDetailView,
+    CompetencyListView,
     CreateNodesView,
-    CreateRelationshipView,
     CreateRelationshipToExistingView,
+    CreateRelationshipView,
+    FrameworkDetailView,
+    FrameworkListView,
+    FrameworkWithCompetenciesView,
     GraphHealthView,
+    WorkRoleDetailView,
+    WorkRoleListView,
 )
 
 urlpatterns = [

@@ -1,11 +1,11 @@
 import json
+from unittest.mock import MagicMock, patch
+
 import pytest
 from django.test import TestCase
-from unittest.mock import patch, MagicMock
-from rest_framework.test import APIClient
-from rest_framework import status
-
 from eccr.utils.validation import PayloadValidator, SchemaValidationError
+from rest_framework import status
+from rest_framework.test import APIClient
 
 
 class PayloadValidatorTests(TestCase):

@@ -1,22 +1,16 @@
+from .competency import CompetencyDetailView, CompetencyListView
 from .framework import (
-    FrameworkListView,
     FrameworkDetailView,
+    FrameworkListView,
     FrameworkWithCompetenciesView,
-)
-from .competency import (
-    CompetencyListView,
-    CompetencyDetailView,
-)
-from .workrole import (
-    WorkRoleListView,
-    WorkRoleDetailView,
 )
 from .graph_operations import (
     CreateNodesView,
-    CreateRelationshipView,
     CreateRelationshipToExistingView,
+    CreateRelationshipView,
     GraphHealthView,
 )
+from .workrole import WorkRoleDetailView, WorkRoleListView
 
 __all__ = [
     # Framework views

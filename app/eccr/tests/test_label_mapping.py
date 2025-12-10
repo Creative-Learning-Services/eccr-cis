@@ -1,11 +1,11 @@
+from unittest.mock import MagicMock, patch
+
 import pytest
 from django.test import TestCase
-from unittest.mock import patch, MagicMock
-
+from eccr.repositories.graph_repo import build_labels_string
+from eccr.services.graph_service import graph_service
 from eccr.utils.label_mapping import label_mapping_manager
 from eccr.utils.validation import PayloadValidator, SchemaValidationError
-from eccr.services.graph_service import graph_service
-from eccr.repositories.graph_repo import build_labels_string
 
 
 class LabelMappingTests(TestCase):

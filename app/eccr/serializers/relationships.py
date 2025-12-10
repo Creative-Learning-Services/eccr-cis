@@ -1,8 +1,5 @@
+from eccr.serializers.competency import CompetencySerializer
 from rest_framework import serializers
-
-from eccr.serializers.competency import (
-    CompetencySerializer,
-)
 
 
 class RequiresRelSerializer(serializers.Serializer):
