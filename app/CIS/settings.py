@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 import os
+import sys
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -21,13 +23,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-fgcih63$a9+iy^sau@v%y4q1g&m57kh9x!x4w4z_f$z%j5s7_*"
+SECRET_KEY = os.environ.get("SECRET_KEY_VAL")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "eccr-backend"]
+ALLOWED_HOSTS = os.environ.get("HOSTS").split(";")
 
+# Content Security Policy (CSP)
+SELF_VALUE = "'self'"  # defining a constant
+SELF_VALUE1 = ("'self' '" +
+               os.environ.get('STYLE_SHA') +
+               "' '" +
+               os.environ.get('IMAGE_SHA') +
+               "' ")  # defining a constant
+IMG_DATA_VALUE = "data:"
+
+CSP_DEFAULT_SRC = (SELF_VALUE, "https://eccr.staging.dso.mil/")
+CSP_SCRIPT_SRC = (SELF_VALUE,)
+CSP_IMG_SRC = (SELF_VALUE, IMG_DATA_VALUE)
+CSP_STYLE_SRC = (SELF_VALUE1, "https://eccr.staging.dso.mil/")
+CSP_FRAME_SRC = (SELF_VALUE,)
+CSP_FONT_SRC = (SELF_VALUE,)
 
 # Application definition
 
@@ -39,25 +56,48 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.admindocs",
     # Library apps
+    "corsheaders",
     "django_neomodel",
     "rest_framework",
     "drf_spectacular",
     "drf_spectacular_sidecar",
+    "knox",
+    "p1_auth",
     # Internal apps
     "competencies",
     "eccr",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "p1_auth.middleware.AuthenticateSessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "csp.middleware.CSPMiddleware",
 ]
+
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = True
+
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_BROWSER_XSS_FILTER = True
+
+CORS_ALLOWED_ORIGINS = [
+    os.environ.get('CORS_ALLOWED_ORIGINS')
+]
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_DOMAIN = os.environ.get('CSRF_COOKIE_DOMAIN')
+CSRF_TRUSTED_ORIGINS = [os.environ.get(
+    'CSRF_COOKIE_DOMAIN'), 'https://'+os.environ.get('CSRF_COOKIE_DOMAIN'),]
 
 ROOT_URLCONF = "CIS.urls"
 
@@ -83,9 +123,13 @@ WSGI_APPLICATION = "CIS.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
@@ -110,22 +154,18 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 
 
 AUTHENTICATION_BACKENDS = (
+    'knox.auth.TokenAuthentication',
     'django.contrib.auth.backends.ModelBackend',
+    'p1_auth.backends.PlatformOneAuthentication',
 )
 
 # Django REST Framework configuration
 REST_FRAMEWORK = {
-    # "DEFAULT_RENDERER_CLASSES": [
-    #     "rest_framework.renderers.JSONRenderer",
-    # ],
-    # "DEFAULT_PARSER_CLASSES": [
-    #     "rest_framework.parsers.JSONParser",
-    # ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "PAGE_SIZE": 20,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'knox.auth.TokenAuthentication',
-        # 'p1_auth.backends.PlatformOneRestAuthentication',
+        'knox.auth.TokenAuthentication',
+        'p1_auth.backends.PlatformOneRestAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
 }
@@ -137,7 +177,6 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     "SCHEMA_PATH_PREFIX": "/api/",
     "SCHEMA_PATH_PREFIX_TRIM": False,
-    "SERVERS": [{"url": "http://localhost:8080", "description": "Development server"}],
 }
 
 # Password validation
@@ -174,9 +213,101 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+LOG_PATH = os.environ.get('LOG_PATH')
+MEDIA_URL = 'media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if os.environ.get('FORCE_SCRIPT_NAME') is not None:
+    FORCE_SCRIPT_NAME = os.environ.get('FORCE_SCRIPT_NAME')
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'loggers': {
+        'dict_config_logger': {
+            'handlers': ['console', 'file_logs'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'simpleRe',
+        },
+        'file_logs': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH,
+            'formatter': 'simpleRe',
+        },
+
+    },
+
+    'formatters': {
+        'simpleRe': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        }
+    }
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Knox settings
+
+if os.environ.get('TOKEN_LIFE_HOURS') is not None:
+    REST_KNOX_TOKEN_TTL = timedelta(
+        hours=float(os.environ.get('TOKEN_LIFE_HOURS')))
+elif os.environ.get('TOKEN_LIFE_FOREVER') is not None:
+    REST_KNOX_TOKEN_TTL = None
+
+if os.environ.get('TOKEN_COUNT_PER_USER') is not None:
+    REST_KNOX_TOKEN_LIMIT_PER_USER = int(
+        os.environ.get('TOKEN_COUNT_PER_USER'))
+
+
+# P1-AUTH SETTINGS
+
+USER_ATTRIBUTES_MAP = {
+    'last_name': 'family_name',
+    'first_name': 'given_name',
+    'email': 'email'
+}
+
+USER_MEMBERSHIPS = {
+    'groups': {
+        'name': 'group-simple'
+    },
+}
+
+if os.environ.get('STAFF_FLAG') is not None:
+    USER_STAFF_FLAG = os.environ.get('STAFF_FLAG')
+
+if os.environ.get('STAFF_VALUE') is not None:
+    USER_STAFF_VALUE = os.environ.get('STAFF_VALUE')
+
+if os.environ.get('SU_FLAG') is not None:
+    USER_SUPERUSER_FLAG = os.environ.get('SU_FLAG')
+
+if os.environ.get('SU_VALUE') is not None:
+    USER_SUPERUSER_VALUE = os.environ.get('SU_VALUE')
+
+if os.environ.get('REQUIRE_JWT') is not None:
+    REQUIRE_JWT = True

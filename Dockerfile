@@ -1,16 +1,24 @@
-FROM python:3.11
+FROM registry1.dso.mil/ironbank/opensource/python:v3.12
 
-WORKDIR /app/app
-ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+USER python
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential gcc libffi-dev libssl-dev bash \
-    && rm -rf /var/lib/apt/lists/*
+RUN if [ ! -f /tmp/debug.txt ]; then touch /tmp/debug.txt ; fi && \
+    chmod a=rwx /tmp/debug.txt && \
+    mkdir -p /tmp/app/eccr-cis
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+WORKDIR /tmp/app/eccr-cis
 
-COPY . .
+COPY --chown=python:python . .
 
-EXPOSE 8080
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+COPY --chown=python:python --chmod=755 start-server.sh start-app.sh /tmp/app/eccr-cis/
+
+ENV PYTHONPATH /tmp/app/eccr-cis/.cache/python-packages
+ENV PATH $PATH:/tmp/app/eccr-cis/.cache/python-packages/bin
+
+RUN rm -rf /home/python/.cache/python-packages/tornado/test/test.key \
+    /tmp/app/.cache/python-packages/tornado/test/test.key \
+    /tmp/app/eccr-cis/.cache/python-packages/tornado/test/test.key
+
+# start server
+EXPOSE 8020
+STOPSIGNAL SIGTERM
