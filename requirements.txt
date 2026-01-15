@@ -2,9 +2,9 @@ coverage>=7.10,<8.0
 
 Django>=5.2.0,<6.0
 
-django-cors-headers>=3.7.0, <3.8.0
+django-cors-headers>=3.7.0,<3.8.0
 
-django-csp>=3.7, <3.8
+django-csp>=3.7,<3.8
 
 django_neomodel>=0.2.0,<0.3.0
 
@@ -24,9 +24,11 @@ neo4j>=5.19.0,<6.0.0
 
 neomodel>=5.3.3,<6.0.0
 
-p1-auth>=0.1.6, <1.0.0
+p1-auth>=0.1.6,<1.0.0
 
-psycopg2-binary >= 2.9, < 3.0
+psycopg2-binary>=2.9,<3.0
+
+pylint-django>=2.7,<3.0
 
 pytest==8.4.2
 
