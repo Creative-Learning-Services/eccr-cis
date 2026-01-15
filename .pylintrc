@@ -4,7 +4,7 @@ max-attributes=22
 [TYPECHECK]
 
 [MASTER]
-DJANGO_SETTINGS_MODULE=openlxp_xis_project.settings
+DJANGO_SETTINGS_MODULE=CIS.settings
 
 disable=unused-argument,
         useless-super-delegation,
@@ -58,11 +58,12 @@ disable=unused-argument,
         consider-using-f-string
 
 
-ignore=test_views_unit.py
-ignore-paths=^.\/app/core/migrations\/.*$,
+
+ignore-paths=^.*/app/competencies/migrations\/.*$,
+             ^.*/app/competencies/tests\/.*$,
              ^.*\.cache\/*\/.*$
 
-init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.dirname(find_pylintrc()))"
+init-hook="import os, sys; sys.path.append(os.getcwd())"
 
 [MESSAGES CONTROL]
 
