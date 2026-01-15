@@ -61,7 +61,8 @@ class DomainSubGraphList(ListAPIView):
         provider_id = self.kwargs["provider_id"]
 
         # add any fields we need to search
-        if "fields" in self.request.GET and self.request.GET.get("fields") is not None:
+        if "fields" in self.request.GET and self.request.GET.get("fields")\
+                is not None:
             self.search_fields += (
                 self.request.GET.get("fields").replace(".", "__").split(",")
             )
@@ -107,7 +108,8 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
         # get base object in case no relationships
         query_resp = db.cypher_query(
             """
-            MATCH (d:NeoDomain {name: $domain_name})-[:HOLDS]->(n{uuid: $node_id})
+            MATCH (d:NeoDomain {name: $domain_name})-[:HOLDS]->
+            (n{uuid: $node_id})
             RETURN n
             LIMIT 1
             """,
@@ -126,7 +128,8 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
         # get relationships
         query_resp = db.cypher_query(
             """
-            MATCH (:NeoDomain {name: $domain_name})-[:HOLDS]->({uuid: $node_id})-[r]->(m)
+            MATCH (:NeoDomain {name: $domain_name})-[:HOLDS]->
+            ({uuid: $node_id})-[r]->(m)
             RETURN r, m
             """,
             {

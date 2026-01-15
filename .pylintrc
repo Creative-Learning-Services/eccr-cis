@@ -1,0 +1,71 @@
+[DESIGN]
+max-attributes=22
+
+[TYPECHECK]
+
+[MASTER]
+DJANGO_SETTINGS_MODULE=openlxp_xis_project.settings
+
+disable=unused-argument,
+        useless-super-delegation,
+        invalid-name,
+        unused-variable,
+        duplicate-code,
+        arguments-renamed,
+        arguments-differ,
+        attribute-defined-outside-init,
+        too-many-branches,
+        too-many-return-statements,
+        consider-using-dict-items,
+        trailing-comma-tuple,
+        inconsistent-return-statements,
+        redefined-outer-name,
+        pointless-string-statement,
+        use-list-literal,
+        broad-except,
+        http-response-with-content-type-json,
+        import-error,
+        unused-import,
+        missing-module-docstring,
+        missing-function-docstring,
+        super-without-arguments,
+        raise-missing-from,
+        no-member,
+        too-many-instance-attributes,
+        no-else-return,
+        missing-module-docstring,
+        missing-class-docstring,
+        missing-function-docstring,
+        super-with-arguments,
+        too-many-statements,
+        redefined-builtin,
+        consider-using-enumerate,
+        unidiomatic-typecheck,
+        unnecessary-comprehension,
+        consider-using-in,
+        use-dict-literal,
+        consider-using-get,
+        too-many-public-methods,
+        too-many-arguments,
+        import-outside-toplevel,
+        line-too-long,
+        deprecated-method,
+        logging-not-lazy,
+        unknown-option-value,
+        superfluous-parens,
+        too-few-public-methods,
+        unsupported-membership-test,
+        consider-using-f-string
+
+
+ignore=test_views_unit.py
+ignore-paths=^.\/app/core/migrations\/.*$,
+             ^.*\.cache\/*\/.*$
+
+init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.append(os.path.dirname(find_pylintrc()))"
+
+[MESSAGES CONTROL]
+
+[FORMAT]
+max-line-length=100
+

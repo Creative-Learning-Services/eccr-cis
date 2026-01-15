@@ -1,6 +1,7 @@
-from competencies import views
 from django.urls import path
 from rest_framework.routers import DefaultRouter
+
+from competencies import views
 
 router = DefaultRouter()
 
@@ -8,7 +9,8 @@ app_name = "competencies"
 
 urlpatterns = [
     path("metadata/", views.NodeCreation.as_view(), name="metadata"),
-    path("managed-data/catalogs", views.DomainList.as_view(), name="managed-catalog"),
+    path("managed-data/catalogs", views.DomainList.as_view(),
+         name="managed-catalog"),
     path(
         "managed-data/catalogs/<str:provider_id>",
         views.DomainSubGraphList.as_view(),

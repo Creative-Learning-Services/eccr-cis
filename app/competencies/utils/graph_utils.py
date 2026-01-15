@@ -122,7 +122,8 @@ class LazyNeoQuery:
         """Retrieve an item or slice from the set of results."""
         if not isinstance(k, (int, slice)):
             raise TypeError(
-                f"LazyNeoQuery indices must be integers or slices, not {type(k).__name__}."
+                "LazyNeoQuery indices must be integers or slices, not" +
+                f"{type(k).__name__}."
             )
         if (isinstance(k, int) and k < 0) or (
             isinstance(k, slice)

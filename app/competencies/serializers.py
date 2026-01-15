@@ -1,7 +1,8 @@
-from competencies.management.utils.ldss_client import read_json_data
-from competencies.models import DjangoDomain, GenericNode
 from neomodel import db
 from rest_framework import fields, serializers
+
+from competencies.management.utils.ldss_client import read_json_data
+from competencies.models import DjangoDomain, GenericNode
 
 
 class DjangoDomainSerializer(serializers.ModelSerializer):
@@ -65,8 +66,8 @@ class DynamicNodeSerializer(serializers.Serializer):
         # track profiles for use in labels
         self.profiles = profile if isinstance(profile, list) else [profile]
 
-        assert profile is not None,\
-              "No Profile provided or found on the instance"
+        assert profile is not None, \
+            "No Profile provided or found on the instance"
 
         profile = read_json_data(profile[0])
 
@@ -77,7 +78,8 @@ class DynamicNodeSerializer(serializers.Serializer):
         for field in profile:
             field_dict = profile[field]
             # get serializer ref based on data type
-            field_serializer = self.type_serializer_map(field_dict[self.data_type_key])
+            field_serializer = self.type_serializer_map(
+                field_dict[self.data_type_key])
 
             # if no serializer mapped skip this field
             if field_serializer is None:
@@ -91,7 +93,8 @@ class DynamicNodeSerializer(serializers.Serializer):
                 # use list and get args for serializer
                 self.fields[field] = serializers.ListField(
                     child=field_serializer(
-                        **self.serializer_args(field, field_dict, field_serializer)
+                        **self.serializer_args(field, field_dict,
+                                               field_serializer)
                     )
                 )
             else:
