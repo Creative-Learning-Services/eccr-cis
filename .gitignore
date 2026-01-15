@@ -9,3 +9,6 @@ plugins
 .env
 app/eccr/migrations
 app/eccr/serializers/__pycache__
+.coverage
+coverage.xml
+htmlcov
