@@ -61,34 +61,6 @@ class TestSetUp(APITestCase):
                                                   last_name=self.auth_last_name,
                                                   is_superuser=True)
 
-        self.email = "test@test.com"
-        self.password = "test1234"
-        self.first_name = "Jill"
-        self.last_name = "doe"
-        self.userDict = {
-            "email": self.email,
-            "password": self.password,
-            "first_name": self.first_name,
-            "last_name": self.last_name
-        }
-        self.userDict_login = {
-            "username": self.email,
-            "password": self.password
-        }
-
-        self.userDict_login_fail = {
-            "username": "test@test.com",
-            "password": "test"
-        }
-
-        self.userDict_login_fail_no_username = {
-            "password": "test"
-        }
-
-        self.userDict_login_fail_no_password = {
-            "username": "test@test.com"
-        }
-
         return super().setUp()
 
     def tearDown(self):
