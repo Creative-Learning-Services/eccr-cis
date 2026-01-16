@@ -67,7 +67,6 @@ INSTALLED_APPS = [
     "p1_auth",
     # Internal apps
     "competencies",
-    "eccr",
 ]
 
 MIDDLEWARE = [
