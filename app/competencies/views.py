@@ -139,6 +139,6 @@ class GenericNodeEndpoint(RetrieveUpdateAPIView):
         )[0]
         # add relationships to uuid
         for rel, _ in query_resp:
-            node._add_attr(
-                rel.type, rel.end_node["uuid"])  # pylint: disable=W0212
+            node._add_attr(  # pylint: disable=W0212
+                rel.type, rel.end_node["uuid"])
         return node

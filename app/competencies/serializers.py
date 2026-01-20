@@ -17,7 +17,7 @@ class DjangoDomainSerializer(serializers.ModelSerializer):
         ]
 
 
-class SpoofedSerializer(serializers.Serializer):
+class SpoofedSerializer(serializers.Serializer):  # pylint: disable=W0223
     """
     don't bother actually serializing, just convert to JSON
     """
