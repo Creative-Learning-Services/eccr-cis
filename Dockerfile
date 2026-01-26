@@ -1,6 +1,6 @@
 # Dockerfile
 
-FROM python:3.9-bookworm
+FROM python:3.12-bookworm
 
 # install nginx
 
