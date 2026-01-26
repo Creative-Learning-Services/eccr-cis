@@ -1,23 +1,30 @@
-FROM registry1.dso.mil/ironbank/opensource/python:v3.12
+# Dockerfile
 
-USER python
+FROM python:3.9-bookworm
 
-RUN if [ ! -f /tmp/debug.txt ]; then touch /tmp/debug.txt ; fi && \
-    chmod a=rwx /tmp/debug.txt && \
-    mkdir -p /tmp/app/eccr-cis
+# install nginx
 
-WORKDIR /tmp/app/eccr-cis
+RUN apt-get update && apt-get install nginx vim -y --no-install-recommends && \
+    apt-get clean
+COPY nginx.default /etc/nginx/sites-available/default
+RUN ln -sf /dev/stdout /var/log/nginx/access.log \
+    && ln -sf /dev/stderr /var/log/nginx/error.log
 
-COPY --chown=python:python . .
+RUN if [ ! -f /etc/debug.log ]; then touch /etc/debug.log ; fi
+RUN chmod a=rwx /etc/debug.log
 
-COPY --chown=python:python --chmod=755 start-server.sh start-app.sh /tmp/app/eccr-cis/
-
-ENV PYTHONPATH /tmp/app/eccr-cis/.cache/python-packages
-ENV PATH $PATH:/tmp/app/eccr-cis/.cache/python-packages/bin
-
-RUN rm -rf /home/python/.cache/python-packages/tornado/test/test.key \
-    /tmp/app/.cache/python-packages/tornado/test/test.key \
-    /tmp/app/eccr-cis/.cache/python-packages/tornado/test/test.key
+# copy source and install dependencies
+RUN mkdir -p /opt/app
+RUN mkdir -p /opt/app/pip_cache
+RUN mkdir -p /opt/app/eccr-cis
+COPY requirements.txt start-server.sh start-app.sh /opt/app/
+RUN chmod +x /opt/app/start-server.sh
+RUN chmod +x /opt/app/start-app.sh
+COPY ./app /opt/app/eccr-cis/
+WORKDIR /opt/app
+RUN pip install -r requirements.txt --cache-dir /opt/app/pip_cache
+RUN chown -R www-data:www-data /opt/app
+WORKDIR /opt/app/eccr-cis/
 
 # start server
 EXPOSE 8020

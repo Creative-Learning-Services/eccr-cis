@@ -39,10 +39,10 @@ SELF_VALUE1 = ("'self' '" +
                "' ")  # defining a constant
 IMG_DATA_VALUE = "data:"
 
-CSP_DEFAULT_SRC = (SELF_VALUE, "https://eccr.staging.dso.mil/")
+CSP_DEFAULT_SRC = (SELF_VALUE,)
 CSP_SCRIPT_SRC = (SELF_VALUE,)
 CSP_IMG_SRC = (SELF_VALUE, IMG_DATA_VALUE)
-CSP_STYLE_SRC = (SELF_VALUE1, "https://eccr.staging.dso.mil/")
+CSP_STYLE_SRC = (SELF_VALUE1,)
 CSP_FRAME_SRC = (SELF_VALUE,)
 CSP_FONT_SRC = (SELF_VALUE,)
 
@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "knox",
-    "p1_auth",
     # Internal apps
     "competencies",
 ]
@@ -75,7 +74,6 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
-    "p1_auth.middleware.AuthenticateSessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -154,7 +152,6 @@ NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "")
 AUTHENTICATION_BACKENDS = (
     'knox.auth.TokenAuthentication',
     'django.contrib.auth.backends.ModelBackend',
-    'p1_auth.backends.PlatformOneAuthentication',
 )
 
 # Django REST Framework configuration
@@ -163,7 +160,6 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 20,
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'knox.auth.TokenAuthentication',
-        'p1_auth.backends.PlatformOneRestAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
 }
@@ -279,33 +275,3 @@ elif os.environ.get('TOKEN_LIFE_FOREVER') is not None:
 if os.environ.get('TOKEN_COUNT_PER_USER') is not None:
     REST_KNOX_TOKEN_LIMIT_PER_USER = int(
         os.environ.get('TOKEN_COUNT_PER_USER'))
-
-
-# P1-AUTH SETTINGS
-
-USER_ATTRIBUTES_MAP = {
-    'last_name': 'family_name',
-    'first_name': 'given_name',
-    'email': 'email'
-}
-
-USER_MEMBERSHIPS = {
-    'groups': {
-        'name': 'group-simple'
-    },
-}
-
-if os.environ.get('STAFF_FLAG') is not None:
-    USER_STAFF_FLAG = os.environ.get('STAFF_FLAG')
-
-if os.environ.get('STAFF_VALUE') is not None:
-    USER_STAFF_VALUE = os.environ.get('STAFF_VALUE')
-
-if os.environ.get('SU_FLAG') is not None:
-    USER_SUPERUSER_FLAG = os.environ.get('SU_FLAG')
-
-if os.environ.get('SU_VALUE') is not None:
-    USER_SUPERUSER_VALUE = os.environ.get('SU_VALUE')
-
-if os.environ.get('REQUIRE_JWT') is not None:
-    REQUIRE_JWT = True
