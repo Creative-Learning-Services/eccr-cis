@@ -5,7 +5,7 @@ CIS Component is the primary funnel for competency and credential data collected
 
 Competency and credential data received from XIAs (or manually uploaded) is stored in the associated [Neo4j DB](https://github.com/neo4j/neo4j). Neo4j is used to support the storage of data with non-uniform data schemas, instead data schemas are validated using [XSS/LDSS](https://github.com/adlnet/ecc-openlxp-xss) when it is submitted to the CIS.  Objects are associated with a domain node within the DB, so that the graph and repsonses can be organized.
 
-
+CIS currently requires that objects have a field labeled `uuid` which must be a unique identifier, and a field labeled `profile` which should be a reference to schema resolvable in the XSS/LDSS, any other fields specified by the profile will also be validated.  If a `WITHIN` relationship to a NeoDomain object is included, then a `HOLDS` relationship from the NeoDomain to the obj will be created.
 
 ## ECCR System Architecture
 
