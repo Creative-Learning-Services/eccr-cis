@@ -111,7 +111,11 @@ ETL pipeline from XIA loads processed competency and credential data into a Neo4
 ## Logs
 Logging is written to standard output and the file specified by the LOG_PATH environment variable.
 
+## Additional Info
+
+Additional information about ECCR can be found in our [ECCR wiki](https://github.com/adlnet/eccr-cis/wiki)
+
 ## License
 
- This project uses the [MIT](http://www.apache.org/licenses/LICENSE-2.0) license.
+ This project uses the [Apache](http://www.apache.org/licenses/LICENSE-2.0) license.
   
