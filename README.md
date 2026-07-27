@@ -1,3 +1,5 @@
+**Reference only.** Source for the core.graph extraction into cls-platform-core. Active development has moved to GitLab under CreativeLearningServices/platform. Do not start new work here.
+
 # ECCR-CIS - Competency Index Service
 ECCR has been developed based on ECC, with CIS resembling [XIS](https://github.com/adlnet/ecc-openlxp-xis).  This has been done so that ECC components can be used as stand-ins until other ECCR applications are built out.  CIS currently supports the `metadata` API used by XIAs, and the `managed-data` APIs used by [XMS](https://github.com/adlnet/ecc-openlxp-xms).  CIS currently supports reading of relationships, but only supports writing of the domain relationship.
 
